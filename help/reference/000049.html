@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>SE_Stop</TITLE>
+    <META http-equiv="Content-Type" content="text/html; charset=GB2312">
+    <META name="GENERATOR" content="Doc-O-Matic">
+    <LINK rel="STYLESHEET" href="default.css" type="text/css">
+
+<SCRIPT LANGUAGE="JavaScript1.2" SRC="scripts.js"></SCRIPT>
+</HEAD>
+<BODY CLASS="body">
+<TABLE BORDER="0" BGCOLOR="#AACCFF" WIDTH="100%" CELLSPACING="0" CELLPADDING="0">
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">
+<DIV CLASS="pageheadertitle">
+NCSE DOC</DIV>
+</TD><TD VALIGN="MIDDLE" ALIGN="LEFT">
+<DIV CLASS="pageheaderlinks">
+<A HREF="content.html" CLASS="link">Content</A> | <A HREF="idx.html" CLASS="link">Index</A> | <A HREF="symref.html" CLASS="link">Reference</A></DIV>
+</TD></TR></TABLE><DIV CLASS="topictitle">
+SE_Stop</DIV>
+<DIV CLASS="topiclinklist">
+<A HREF="000030.html" CLASS="link">File: se_interface.h</A></DIV>
+<DIV CLASS="codeblock">
+<DIV CLASS="code">
+<PRE CLASS="code"><STRONG>int</STRONG> SE_Stop(<STRONG>long</STRONG> nMillionSeconds, <STRONG>long</STRONG> force);</PRE></DIV>
+</DIV>
+<DIV CLASS="sectionheader">
+Description</DIV>
+<DIV CLASS="defaultsectiontextblock">
+<DIV CLASS="defaultsectiontext">
+Stop Script Engine and release resouces used by SE<P CLASS="defaultsectiontext">
+</DIV>
+</DIV>
+<DIV CLASS="sectionheader">
+Parameters</DIV>
+<DIV CLASS="parametercode">
+long force</DIV>
+<DIV CLASS="parameterdefaultsectionblock">
+<DIV CLASS="parameterdefaultsection">
+[in]If force = 1, when the interval elapses and there are still running scripts, all runing scripts will be terminated.<P CLASS="parameterdefaultsection">
+</DIV>
+</DIV>
+<DIV CLASS="parametercode">
+long nMillionSeconds</DIV>
+<DIV CLASS="parameterdefaultsectionblock">
+<DIV CLASS="parameterdefaultsection">
+[in] Specifies the time-out interval, in milliseconds. The function returns if the interval elapses and not all runing script exit.</DIV>
+</DIV>
+<DIV CLASS="sectionheader">
+Return Value</DIV>
+<DIV CLASS="defaultsectiontextblock">
+<DIV CLASS="defaultsectiontext">
+int - please see return code list</DIV>
+</DIV>
+<DIV CLASS="sectionheader">
+See Also</DIV>
+<DIV CLASS="defaultsectiontextblock">
+<DIV CLASS="defaultsectiontext">
+<SPAN CLASS="brokenlink">Author: Jackie Ju</SPAN>, <SPAN CLASS="brokenlink">Date:   2002-11-25</SPAN></DIV>
+</DIV>
+<DIV CLASS="copyrightnotice">
+<HR></DIV>
+</BODY></HTML>

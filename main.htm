@@ -1,0 +1,160 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=gb2312">
+<title>index page</title>
+<script src="js/jquery.js"></script>
+<script src="js/jquery.mousewheel.js"></script>
+<script src="js/jquery.jcarousellite.js"></script>
+<script src="js/jquery.resizeimage.js"></script>
+<script> 
+$(document).ready(function(){
+  var $album = $("#album");
+ /* $album.jCarouselLite({
+    vertical: true,   // 传送带为垂直方式
+    btnPrev: "#album_up",  // 向上的按钮
+    btnNext: "#album_down",  // 向下的按钮
+    mouseWheel: true,  // 添加对鼠标滚轮的支持，可以使用鼠标滚轮来让传送带转动
+    circular: false,  // 不循环滚动
+    visible: 2  // 传送带上的可见项目为2个
+  })*/
+//  $(".imageContainer", $album).click(function() {
+    // 通过AJAX来加载相册数据，并在加载成功后设置图片传送带
+//    $("#images").empty().load("https://twiki.shang.adways.net/twiki/pub/Technique/JQueryImageGallery/" + this.id + ".html", function() {
+     $("#images").jCarouselLite({
+        vertical: false,  // 传送带为默认的水平方式
+        btnPrev: "#image_prev",  // 向左的按钮
+        btnNext: "#image_next",  // 向右的按钮
+        mouseWheel: true, 
+        circular: false,
+        visible:5 
+      });
+     /* $(".imageContainer", this).click(function() {
+        // 点击传送带上的小图后在其上方显示大图
+        var $img = $("<img />").attr("src", $("img", this).attr("src")).load(function() {
+          $(this).resizeImage(400, 400);  // 在图片加载完成后调整其大小
+        });
+   //     $(".largeImageContainer").empty().append($img);
+        if ($img.width())
+          $img.resizeImage(400, 400);  // 如果img的load事件没有触发，则在这里调整图片大小，
+      }).eq(0).click();*/
+//    });
+//  }).eq(0).click();
+});
+</script>
+
+<style>
+img{border-width:0px;}
+.imageContainer {
+  border: 0px solid gray;
+  width: 100px;
+  height: 100px;
+
+}
+.largeImageContainer {
+  border: 1px solid gray;
+  width: 400px;
+  height: 400px;
+  margin-bottom: 20px;
+  margin-left: 88px;
+}
+.albumTitle {
+  text-align: center;
+  font-size: 10pt;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 1px;
+  width: 100px;
+}
+ul{margin: 0pt; padding: 0pt; position: relative; list-style-type: none; z-index: 1; width: 1020px; left: 0px;}
+ul li {overflow: hidden; float: left; width: 102px; height: 102px;border-width:0px;}
+
+</style>
+
+</head>
+<body bgcolor="#ffffff">
+<CENTER>
+<!--<IMG SRC = "Images/logo.gif" height = 70 />-->
+
+<!-- navigator bar -->
+<!--<table>
+<tr><td bgcolor=#ddffdd></td><td bgcolor=#ddffdd></td></tr>
+</table>-->
+
+<p>
+<div style="position:relative;width:700px;oveflow:hidden;height:100px;">
+<div style="float: left; margin-right: 10px; margin-top: 39px;">
+<button id="image_prev" class="" style="border-style:solid;background:transparent;border-width:0px;" ><<</div>
+
+<div id="images" style="overflow: hidden; float: left; visibility: visible; position: relative; z-index: 2; left: 0px; width: 550px;">
+<ul>
+  <li>
+    <div class="imageContainer" >
+      <a href="Images/ju6.jpg"><img src="Images/ju6.jpg" onload="$(this).resizeImage(100, 100)" /></a>
+    </div>
+  </li>
+  <li>
+    <div class="imageContainer" >
+       <a href="Images/ju8.jpg"><img src="Images/ju8.jpg" onload="$(this).resizeImage(100, 100)" /></a>
+    </div>
+  </li>
+  <li>
+    <div class="imageContainer" >
+      <a href="photos/My classmates in middle shcool.jpg"><img src="photos/TN_My classmates in middle shcool.JPG" onload="$(this).resizeImage(100, 100)" /></a>
+    </div>
+  </li>
+  <li>
+    <div class="imageContainer" >
+      <a href="photos/HeidelBurg.JPG"><img src="photos/TN_HeidelBurg.JPG" onload="$(this).resizeImage(100, 100)" /></a>
+    </div>
+  </li>
+ <li>
+    <div class="imageContainer" >
+     <a href="photos/at Song Jiang Film Base.JPG"><img src="photos/TN_at Song Jiang Film Base.JPG" onload="$(this).resizeImage(100, 100)" /></a>
+    </div>
+  </li>
+ <li>
+    <div class="imageContainer" >
+      <a href="photos/throwing.JPG"><img src="photos/TN_throwing.JPG" onload="$(this).resizeImage(100, 100)" /></a>
+    </div>
+  </li>
+
+ <li>
+    <div class="imageContainer" >
+       <a href="photos/to get the ball.JPG"><img src="photos/TN_to get the ball.JPG" onload="$(this).resizeImage(100, 100)" /></a>
+    </div>
+  </li>
+
+
+</ul>
+</div>
+<div style="float: left; margin-left: 10px; margin-top: 39px;">
+<button id="image_next" class="" style="border-style:none;background:transparent;" >>></button>
+</div>
+<p /><br/></div>
+<div style=”font-size:0px; line-height:0px; clear:both;”>
+</div>
+<br/>
+Hello, here is juju's happy life of software Dev. All is about me and computer science. <br>Have fun!
+
+
+<hr>
+</CENTER>
+
+ <b>History of page update:</b><p>
+ <iframe src="history.htm" title="change log" frameborder=0 wrap=yes width=100% scrolling=yes height=500 align=left allowTransparency> 
+      <a href="history.htm">Change log</a> </iframe>
+ 
+
+
+
+
+
+
+<table>
+
+
+</table>
+
+
+</body>
+</html>

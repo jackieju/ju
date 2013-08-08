@@ -1,0 +1,214 @@
+<html>
+
+<head>
+<title>NC(New C)Script Engine(SE) Online Help</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<table width="%100">
+<tr><td><a href="index.htm">Home</a></td></tr>
+<tr><td><hr width="%100"></td></tr>
+<tr><td>
+<center>
+<b>NC Script Engine Online Help</b>  
+</center>
+</td></tr>
+<tr><td>
+		Index: 
+		<ol> 
+			
+			<li><p></p><p><a href="#Introduction">Introduction</a></p></li> 
+			<ol> 
+				<li><a href="#Overview">Overview</a></li>				
+				<li><a href="#architecture">Architecture</a></li>				
+			</ol> 
+
+			 <li><p></p><p><a href="#usese">how to use NCSE</a></p></li>
+			<ol> 
+				<li><a href="reference/000059.html">Setup NC Script Engine</a></li>
+				<li><a href="reference/000060.html">Step by step using NCSE </a></li>
+				<li><a href="reference/index.html">API reference</a></li>				
+				<!--<li><a href="sesample.rar">Sample</a></li>-->
+			</ol> 
+			
+				 
+			 <li><p></p><p><a href="scripts.htm">NC Developer's Guide</a></p></li>
+			<ol> 
+				<li><a href="syntax.htm">Semantic rules</a></li>
+				<!-- <li><a href="coding.htm">How to write a NC source file</a></li> -->
+				<li><a href="lib.htm">How to write external lib for NCSE</a></li>
+			</ol> 
+			
+	<!--		 <li> <p></p><p><a href="/ps2help/pscom.htm">PS2.0客户端COM使用指南</a></p></li>
+			<ol>
+				<li><a href="../ps2help/pscom.htm#1">PSCOM概述</a>　</li>
+				<li><a href="../ps2help/pscom.htm#2">使用环境简介</a>　</li>
+				<li><a href="../ps2help/pscom.htm#3">安装说明</a>　</li>
+				<li><a href="../ps2help/pscom.htm#4">接口描述</a>　</li>
+				<li><a href="../ps2help/pscom.htm#5">如何在ASP中使用PSCOM</a></li>
+			</ol>
+		-->	
+			
+			
+			<li><p></p><p><a href="faq.htm">FAQ</a></p></li> 
+		</ol> 
+</td></tr>
+
+<tr><td><hr width="%100"></td></tr>
+
+<tr><td>
+<center><h2>New C Script Engine Online Help</center>       
+</h2>
+<ol>
+	<li><a name="#introduction"/><H3>Introduction</H3></li>
+	<ol>
+		<li><a name="#Overview"><B>Overview</B></a></li>
+		<p>
+		<table>
+		<tr><td>
+		
+		<font size = 3>
+
+Do you want to make your game or software system have nice programablity like QuakeIII or Unreal, which both use the script engine technology?	
+NewC(NC) is one c-like program language. The NCSE(NewC script engine) provide the compiler and the executor of NC program. 
+To Embed NCSE in your system will enhance your system's extendibility and flexibility hugely.
+ <p>
+The NCSE is consist of two parts: NC compiler and virtual machine.
+The NC compiler compile the NC source to one kind of middle-code, which is platform-independent. The NC viurtal machine
+execute the middle-code.
+<p>
+The goal of NC is to seperate the business logic from software development. 
+<p>
+All other program languages blend the logic with implementation, which make the burden of business developer. In NC architecture, the concrete implementation of system is provided by third-party vendor, such as http communictaion or database access. This make the NC developer need not take care of how the logic is implemented. That is, the NC is only responsible for describing the business logic of one software system, and care nothing for the concrete implementation(such as io, DataBase).  When the requirement change, the developer should noly modify the NC code but not other implements. A System integrated with NCSE will present the significant flexibility. 
+<p>
+
+	
+		</font>
+		</td>
+		</tr>
+		</table>
+ 
+		<li><a name="#architecture"><B>Architecture</B></a></li>		
+
+		<p>
+		NCSE is composed of the NC complier and NC Assembly code Executor.
+		The NC compiler compile the NC source to NC Assembly code.
+		The NC assembly code executor can run the NC assembly code.
+		That user should privode is the external Libs(in win32 is dll), and NC source.		
+		<p>
+		
+    architecture:   
+		<p>
+		
+    <span lang="EN-US" style="font-size:10.5pt;mso-bidi-font-size:
+12.0pt;font-family:宋体;mso-hansi-font-family:&quot;Times New Roman&quot;;mso-bidi-font-family:
+&quot;Times New Roman&quot;;mso-font-kerning:1.0pt;mso-ansi-language:EN-US;mso-fareast-language:
+ZH-CN;mso-bidi-language:AR-SA"><!--[if gte vml 1]><v:shapetype id="_x0000_t75"
+ coordsize="21600,21600" o:spt="75" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe"
+ filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:414.75pt;
+ height:258pt' o:ole="">
+ <v:imagedata src="file:///C:/DOCUME~1/whju/LOCALS~1/Temp/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+    <!--[if gte vml 1]><v:shapetype id="_x0000_t75" 
+ coordsize="21600,21600" o:spt="75" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe"
+ filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:414.75pt;
+ height:258pt' o:ole="">
+ <v:imagedata src="file:///C:/DOCUME~1/whju/LOCALS~1/Temp/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+    <!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Word.Picture.8" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1077628822">
+ </o:OLEObject>
+</xml><![endif]-->
+    <!--[if gte vml 1]><v:shapetype id="_x0000_t75"
+ coordsize="21600,21600" o:spt="75" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe"
+ filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:414.75pt;
+ height:258pt' o:ole="">
+ <v:imagedata src="file:///C:/DOCUME~1/WHJU~1.JS-/LOCALS~1/Temp/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+    <img src="index.1.gif" v:shapes="_x0000_i1025" width="553" height="344"><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Word.Picture.8" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1095663857">
+ </o:OLEObject>
+</xml><![endif]-->
+    <!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Word.Picture.8" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1077628709">
+ </o:OLEObject>
+</xml><![endif]-->
+    </span>
+		
+	</ol>
+
+		</ol>
+
+
+</ol>
+
+</a>
+
+</td></tr>
+<tr><td><hr width="%100"></td></tr>
+<tr><td><i><font size=2>By <a href="mailto:jackie_juju@hotmail.com">Jackie juju</a></font></i></td></tr>
+</table>
+
+
+</body> 
+</html>

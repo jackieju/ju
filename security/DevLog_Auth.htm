@@ -1,0 +1,270 @@
+<html>
+<body>
+<b>Development Log</b><br>
+
+
+<hr>
+<pre>
+[LOG]    2004-6-10 0:54
+1. 资金的问题
+100万可以做多少事, 维持一个公司多少时间
+公司的运营成本
+
+2. 产品的问题
+产品提供的功能以及市场需求
+文挡加密
+
+3. 产品的竟争者
+Authentica,
+pgp
+
+[LOG]    2004-6-12 14:57
+技术:
+1. LDAP
+2. 加密
+
+[LOG]    2004-6-12 19:42
+核心组建:
+Policy Server/ client / admin tools(https)
+
+核心流程:
+文挡生成key, 注册到policy server 上
+使用文档时client向policy server请求认证.
+Policy server上的user Management, right management, key management, audit
+
+其他组建:
+Client: for mail, word, web page...
+integration with external authentication/ authrization system
+
+[LOG]    2004-6-19 20:34
+和wq, yy一起聊了聊:
+1. 对于风险投资怎样比较好
+最好当然是钱多, 而且我们占的股权多, 这是最理想的
+一般来说, 有两种情况需要投资1. 当需要启动资金. 2. 业务需要有指数级的扩展, 因而需要大量资金
+第一种情况下, 投资者会投较少的钱而占较的股份, 第二种情况相反.
+但是, 我们确实缺少启动资金.
+
+在公司启动时, 资金确实占重要的地位. 但是, 我们应该尽量减少成本.
+比如可以让代理公司代理注册资金, 免费租用朋友公司的地方等等.
+尽量不依赖别人的资金. 
+最好是, 我们东西做出来或, 有投资人求我们用他的钱, :D
+
+不过, 这是第一次创业, 不可能所有东西都很理想, 所以, 现开始干了再说.
+
+2. wq有比较完全的公司计划. 我和yy的任务就是把东西做出来.
+
+3. 初步定在6月底完成需求和技术调研.
+
+
+
+
+[LOG]    2004-6-23 22:26
+终于Authentica server 能启动了. 但是mailcall 显示不能register docuemnt, 可能是表没有建
+总结:
+1. 不能添加license, 是因为dist serial number 没有改对, 使用volid修改时不需要高低位交换
+2. 一开始装不上sql server, 是因为装Policy server时, 默认安装了msde, 所以sql server 装完后无法启动
+3. 想使用msde, 但是发现他defaut use window authentication mode, so the polica server can not create new server.
+4. 重新使用sql server, 才可以create new server in "server configuration", 但是要注意create db 时, collation name 选对, 就使用installation guide里的名字
+但是, 难道不需要建表?
+检查db, 发现有了佷多表, 估计是create server时建的
+5. Send mail 时, mailrecall说不能Register Document, 原因是用户必须有Protect..等等权限, 使用Administrator tool进行配置
+
+
+[LOG]    2004-7-4 18:20
+在网上找outlook plugin source code 并且好象也是一个和安全有关部门的, 不过是德语的.
+最好有比较Generic 的UserMgr的SourceCode, 我们可以她的基础上做安全。
+实在不行就用ss的。ss-UserMgr已经提供了
+Login-logoff Authentication
+session protection
+User-Group-role structure
+Authorization managerment, can assign privilege to user and group.
+
+我们需要添加的功能是
+我们授权对象只有一个， 就是文档。 所以有两种反案：
+1。 修改ss-UserMgr 的权限管理模块
+2。 把我们的应用作为ss-UserMgr 的一个client
+
+
+
+有关Authentica的问题: (将咨询ming)
+1. mailrecall 依赖security gateway 吗?
+2. security gateway 究竟是起什么作用的?
+3. content security server 不能连接Policy server 的问题。
+
+
+技术点：
+1. how to dev outlook plugin?
+Have found detailed source code.
+2. how prevent the Screen copy (Authentica can do this)
+Please yy research for it.
+3. why need asymmetry encrypt? I think only need 1 key.
+也就是具体的加密流程， 见research.doc。 I will go on research for it and go down to detail.
+4. how to dev pdf plugin?
+5. to utilize ss-UserMgr?
+ss-UserMgr是以前公司开发的一套用户管理系统， 有比较完善的用户－组的管理和Authentication/Authorization模块， 甚至用户管理界面。
+
+
+[LOG]    2004-7-5 16:27
+编译ss code的顺序
+UserMgr:
+communication
+sessionMgr
+UserMgr
+
+
+[LOG]    2004-7-6 11:26
+费了好大力气， 终于把UserMgr 在SQL Server上跑起来了。 主要遇到一下问题
+1. 建表的脚本是for DB2的， 许多字段名是SQL server 的保留字， SAP DDIC 还是很有用的， 因为它在你建表时就防止你使用某些数据库不支持的特性。
+2. 连不上数据库， 原因是DBConnectPool连接时使用了DB2专用的修改数据库时间字段格式的语句。 另外由于使用了OTL， 许多地方都有问题。
+3. 代码中都使用了Schema.Table的sql statement. 这是SQLSVR不支持的。 全部用#ifdef改掉了。
+4. timestamp的比较问题， sql server 要先convert char to timestamp
+
+[LOG]    2004-7-6 11:36
+找到了原来PS UM的DEMO jsp, 可以修改一下作为Administration tools
+要装个tomcat
+
+[LOG]    2004-7-6 14:13
+<B>安装tomcat
+ </B>
+ 1. 下载tomcat4.0
+ 2. upzip 到制定目录
+ 3.修改conf/server.xml 更改端口（如果需要）
+ 4. 设置环境变量CATALINA_HOME=..
+ 5. 运行bin/startup.bat
+ 
+ install JBuild
+
+[LOG]    2004-7-6 19:38
+<B>
+ </B>
+ 
+ UserMgr的管理员密码是什么?
+ 111111
+ 
+ [LOG]    2004-7-9 20:58
+ <B>
+  </B>
+  
+  jsp还是有问题, 应该是cookie没有用base64编码的问题, 因为Cookie object 根据RFC 2109規定只能包含ASCII code,其他的不行
+  但是为什么以前是可以的?
+  HTTP Status 500 - 
+
+--------------------------------------------------------------------------------
+
+type Exception report
+
+message 
+
+description The server encountered an internal error () that prevented it from fulfilling this request.
+
+exception 
+
+org.apache.jasper.JasperException: MDg2MDAyMTAxMDAwMDAwMDgyAAIxMC41Ni4xMzIuMTAyAAAAAAAAAAAAAAAAAAAAAAAA
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:254)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:295)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:241)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:853)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:247)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:256)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:643)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:480)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:995)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:191)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:643)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:480)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:995)
+	at org.apache.catalina.core.StandardContext.invoke(StandardContext.java:2416)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:180)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:643)
+	at org.apache.catalina.valves.ErrorDispatcherValve.invoke(ErrorDispatcherValve.java:171)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:641)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:172)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:641)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:480)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:995)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:174)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:643)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:480)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:995)
+	at org.apache.coyote.tomcat4.CoyoteAdapter.service(CoyoteAdapter.java:223)
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:601)
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.processConnection(Http11Protocol.java:392)
+	at org.apache.tomcat.util.net.TcpWorkerThread.runIt(PoolTcpEndpoint.java:565)
+	at org.apache.tomcat.util.threads.ThreadPool$ControlRunnable.run(ThreadPool.java:619)
+	at java.lang.Thread.run(Thread.java:534)
+
+
+root cause 
+
+java.lang.IllegalArgumentException: MDg2MDAyMTAxMDAwMDAwMDgyAAIxMC41Ni4xMzIuMTAyAAAAAAAAAAAAAAAAAAAAAAAA
+	at org.apache.tomcat.util.http.ServerCookie.maybeQuote(ServerCookie.java:315)
+	at org.apache.tomcat.util.http.ServerCookie.appendCookieValue(ServerCookie.java:248)
+	at org.apache.coyote.tomcat4.CoyoteResponse.addCookie(CoyoteResponse.java:864)
+	at org.apache.coyote.tomcat4.CoyoteResponseFacade.addCookie(CoyoteResponseFacade.java:278)
+	at org.apache.jsp.UM_UF_Logon_jsp._jspService(UM_UF_Logon_jsp.java:120)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:137)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:853)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:210)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:295)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:241)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:853)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:247)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:256)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:643)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:480)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:995)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:191)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:643)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:480)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:995)
+	at org.apache.catalina.core.StandardContext.invoke(StandardContext.java:2416)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:180)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:643)
+	at org.apache.catalina.valves.ErrorDispatcherValve.invoke(ErrorDispatcherValve.java:171)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:641)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:172)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:641)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:480)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:995)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:174)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:643)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:480)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:995)
+	at org.apache.coyote.tomcat4.CoyoteAdapter.service(CoyoteAdapter.java:223)
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:601)
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.processConnection(Http11Protocol.java:392)
+	at org.apache.tomcat.util.net.TcpWorkerThread.runIt(PoolTcpEndpoint.java:565)
+	at org.apache.tomcat.util.threads.ThreadPool$ControlRunnable.run(ThreadPool.java:619)
+	at java.lang.Thread.run(Thread.java:534)
+
+
+
+--------------------------------------------------------------------------------
+
+Apache Tomcat/4.1.27
+
+
+估计是Tomcat的问题， 因为以前再weblogic 和webspere上是好的。
+那就只好不用cookie了先
+但是这样就没有session了，不能做任何事情了...faint
+ 
+ [LOG]    2004-7-11 0:36
+ <B>
+  </B>
+  今天和david聊了之后， 觉得
+  1. 原来的UserMgr估计不能用， 因为UserName/password的authentication机制太弱了。除非， 修改它的login机制， 使用ssl。
+  另外， UserMgr的session的安全机制还不是很清楚， 可能也有问题。
+  2. 可以用jaas(java authentication & authorization service)来写, 但是这样就必须使用j2ee
+  3. 目前的人力和开发模式可能无法在今年内开发出产品， 因为对产品技术方面的复杂度看样字预计过低了。
+  	但是可以有两个解决办法，
+  	1. 先代理其他公司的产品， 主要是美国的。 这样以来可以有一些运营经验， 另外可以让客户知道我们是做“安全”的公司， 从而信任我以后的产品。同时， 我们开发自己的产品，
+  	2. 削减功能。 一期只做最重要的， 用户最看得见， 最关心的。 也就是说mail的加密。
+  4。 mail 的加密可以在s/mime的基础上做。 Server的主要功能还是Authenitcation， Authorization, 和key management.
+  	SMIME主要是通过发件人用私钥加密， 收信人用公钥解密的方式。 但是必须有一个public key database来管理。
+  5。 在第二步做文件加密时， 需要做文件的authentication。 就是在文件中使用证书， 来证明这是可以读的文件。 另外还需要设计文件格式。
+</pre>
+
+</body>
+</html>

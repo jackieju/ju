@@ -1,0 +1,276 @@
+<html>
+<head>
+<META NAME="GENERATOR" Content="Microsoft FrontPage 4.0">
+<title>Plan</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body bgcolor="#ffffff">
+
+<object id=msodsc classid=CLSID:0002E530-0000-0000-C000-000000000046></object>
+<p>
+
+<table width="600">
+<tr><td><a href="main.htm">Home</a></td></tr>
+
+
+<tr><td align = "center"><font size=5>Plan</font></td></tr>
+<tr><td><hr width="%100"></td></tr>
+</table>
+
+<p></p>
+
+
+
+
+
+<p></p>
+<!--
+<table  border=0 bordercolor="2222ff" width = "%80">
+<tr><td align="center"><b>Date</b></td><td align="center"><b>Content</b></td></tr>
+<td></td><td></td></tr>
+
+<tr><td align="" bgcolor ="#eeeeff">2002/09  </td></tr>
+<tr><td>
+
+</td></tr>
+<tr><td></td><td></td></tr>
+
+</table>
+-->
+<pre>
+<font color="#00ee00">[Plan]</font>    2003-8-3 1:04
+可以继续致力于c++vm 和数据管理。 因为逻辑和数据是IT最核心的东西。原来ps的思想确实是非常正确的。
+NewC VM或者说NCSE是逻辑的核心。它的发展方向是完全的面向对象， 比java更高效率， 比cpp更整洁干净，（ 因为
+cpp要保持兼容性， 所以它在不断进步的同时还保持了许多原来的成就的东西）。实现分布式对象模型， 从而支持xml RPC和web service.
+数据管理部件(DM)主要是用于访问数据库货其他数据源，和传统ODBC和JDBC的区别
+是：用对象的方法访问泛数据源，ODBC或jdbc是它的用户方法数据库的底层实现, 用xml或其他方法描述数据源，甚至可以描述访问数据源
+的方法或接口。 
+在NCSE和DM的基础上， 可以发展其他中间件技术， 这也可以通过开源的方式由广大的开发者进行开发， 就像j2ee上的struts, cocoon,
+等等。其实j2ee中最核心就是java vm,以及在它基础上的分布式对象模型（rmi)和jsp技术。 其他诸如jdbc, servlet, jndi，jms等等都是
+java的api，这些api分别实现了各种中间层部件。
+一个最简单的基于NCSE的应用服务器模型就是：
+xml RPC 用于访问应用
+NCSE	用于编写应用
+CORBA	实现分布式对象计算
+DM	实现数据管理
+其中web service和corba的细节还不是很清楚
+
+NCSE的另一个发掌方向是应用于game engine的script技术。 及可以和2d/3d图形引擎协同工作的脚本引擎， 可以描述大多数游戏逻辑。
+
+
+<font color="#00ee00">[Plan in 2001.7]</font>
+
+PS2.0S需要改进的地方:
+
+1.       二次开发环境
+
+a)         脚本编译环境
+
+b)        调试环境.
+
+c)        图形界面的远程手工制作请求并发送的控制台。
+
+d)        ps控制端口, 使用简单的telnetserver
+
+e)         DataDes
+
+                         i.              生成建表脚本时添加索引的创建，注意外键的顺序和index一致.
+
+2.       外挂除datamgr以外的用户DLL, 让开发者添加插件。
+
+3.       编译器：
+
+a)         预编译常量__FILE__, __LINE__, __FUNCTION__, __DATE__, __TIME__,
+
+b)        调用外部函数时校验参数个数和类型，服务崩溃经常是因为传错参数。
+
+4.       支持CLOB
+
+5.       跨平台
+
+6.       性能扩展性。
+
+7.       java客户端
+
+8.       和其他主流产品的接口和通信。
+
+9.         
+
+  
+
+  
+
+
+
+<font color="#00ee00">[Plan in 2001.6]</font>
+1.实现脚本函数的互相调用
+1.在compiler中加入callv, paramv, 和 endcallv指令.
+2.当编译时发现函数名在pubfunctable中没有时, 到scriptfucntable中查找, 如找到, 则添加call指令, 操作数是CFucntion的指针.
+3.paramv记录参数
+4.endcallv指令负责load子函数,    把当前IP, 数据段地址和子函数指针推入call stack把当前函数指针指向栈的顶端, IP归零
+先分配内存, 然后把数据段的指针指向子函数的内存.
+       因为所有指针都是物理地址因此参数也可以是指针.
+       复制参数
+5.return时, 把返回值赋给AX, 销毁内存, 恢复IP和数据段指针, pop出子函数指针.
+6.要修改的地方
+       compiler
+       实现callv, paramv, endcallv, return
+       增加call stack, 当前函数指针
+       修改run函数
+
+7.所有的return语句必须返回一个值.
+
+8.修改ValidateAddress函数
+       使他在验证时遍历callstack中所有的虚拟内存
+
+9.测试
+
+10. 要考虑当函数的调用参数是一个函数的返回值的情况, 比如: test1(0, test2());
+       这一情况当前VM会出错.
+       解决方法: 添加一个函数调用栈, 修改所有和函数调用有关的虚拟汇编指令的实现函数和VM的析构函数
+
+11. 被调用的脚本函数如果传出一根指针, 由于函数在return后它所有的内存已被释放,
+       因此这根指针是不可用的. 但传入的指针是可以被被调函数使用的.
+       解决方法: 待解决
+12.       实现分配动态内存 
+13.      函数运行时的超时检测机制 
+
+14.       调试工具 
+a)        检查是否有不规范的写法, 如创建的obj没有释放, 用户数据没有解锁等等. 
+b)        图形界面的调试工具 
+c)           
+
+15.       开放式接口: javalib方式 
+
+16.       安全性方面的考虑 
+
+17.   跨平台 
+
+a)        去掉所有使用了MFC的地方 
+
+b)        使用MinGW(gcc的Win32版本)开发和编译程序. 
+
+c)         所有使用的数据类型用另外的头文件重新自定义一下 
+
+18.   与其他主流产品的接口和通讯 
+
+19.   应用设计 
+
+a)        count字段: 
+
+一般数据结构都有count字段来记录某种ID的子对象的个数( 因为实时计算会耗时很多, 特别是当子对象是日志型数据时 ), 但一旦数据操作有失败时, 容易导致count的值和实际子对象个数不一致. 考虑只为日志型数据添加count字段, 一般数据类型不使用count字段记录个数, 添加一个接口实时取子对象个数(不能直接使用CDataObj的method, 因为不一定所有的子对象都在cache中).[12/17/2001]但是考虑到数据结构的打改动可能会使数据迁移产生困难, 因此为了先保证portfolio的移植成功, 先使用老的数据结构, 移植完后考虑数据结构的优化, 因为ps上改动应用相对较容易. 
+
+b)        [12/17/2001]考虑是否可以把DataDes和PSDebuggr, 做在一个界面中, 再加上ScriptEditor和ASPEditor,可以进一步发展成PS的二次开发环境. 
+
+13.   其他改动
+
+a)         DataDes:
+
+                         i.              添加注释
+
+                       ii.              添加ID属性
+
+                      iii.              ID的唯一性验证
+
+                     iv.              单击保存, 而不必回车
+
+                       v.              使用log
+
+                     vi.              给dataStruct 添加nextID属性
+
+                   vii.              改属性值框的右侧不超过属窗口 
+
+                  viii.              修改后如果newDocument时提示保存
+
+                     ix.              dataAccess作为根节点
+
+                       x.              null属性的默认值改为no, 因为DataMgr生成insert语句时不会有null出现
+
+                     xi.              当key=”yes”时, 自动将null改成”no” 
+
+                   xii.              当设置完name后, 自动把column设置成与name相同的值 
+
+                 xiii.                
+
+b)        DataMgr
+
+                         i.              不使用name作为dataobj的表示, 改用ID
+
+1.         修改CDataObj的实现
+
+2.         修改internal.cpp中DataMgr的底层实现
+
+3.         修改DataMgr.cpp中的接口实现
+
+                       ii.              生成insert和update语句时检测字符串字段的值中是否含有单引号, 如果有, 则替换成两个单引号
+
+                    iii.              生成insert和update语句时检测是否有不能为空的字段的为NULL(.不用了, 因为在设置obj值的所有接口中不允许pNewValue为null, 另外, 在生成sql语句的method中不会生成NULL, 因此不用加此判断) 
+
+                     iv.              添加一个接口实时取子对象个数
+
+c)        去掉CDataObj中的无用字段(offset, totallen, subobjnum), 缩短ID的长度到16bit.
+
+d)        添加两个接口Start_Transaction, End_Transaction. 
+
+                        i.              ST的时候在TRANS_APP中查找(添加)用户节点, 返回Transaction句柄. 
+
+                      ii.              读操作时, 如果所需节点不在cache中的话, 从文件中Load整个对象到TRANS_APP. 
+
+                    iii.              写操作的时候, 如果TRANS_APP中没有该文件对象存在, 则把整个文件对象load到TRANS_APP中来,, 修改该对象和cache中的数据, 设修改标志位, 生成SQL语句到TRANS_APP的SQLbuffer中. 
+
+                     iv.              ET的时候 
+
+1.         如果参数为”确认提交”, 如果修改标志被设置, 则用TRANS_APP中的对象替换chache中对象, 并存到文件, 然后提交SQLbuffer中所有SQL语句(为防止start_trans和end_trans中时间较长, 所以所有的SQL语句一次性提交)到一步更新队列. 如果异步更新失败, 从数据库重新load数据到文件和内存. 
+
+2.         如果参数为”取消提交”, 则删除TRANS_APP中相应对象和所有SQL语句. 
+
+                       v.              一个用户同时只能有一个TRANSACTION, 所以SQLbuffer只有一个. 
+
+                     vi.              TRANS_APP是一个特殊的APP cache. 
+
+e)        dm添加两个接口A_Log, A_GetTime 
+
+f)         dm添加U_GetSubObjNumByID的接口. 
+
+g)        DataDes应该有自动生成文档的功能(包括程序和设计文档), 可以用xsl加xml的方式来做, 软件默认有多个xsl可以使用, 用户也可以使用自己的xsl来显示数据结构 
+
+h)        为简化脚本编写, 脚本中不用做参数检验, 所以DM的所有接口中都严格判断参数是否正确, 以避免crash. 这次添加了写操作生成insert和update语句时检验字段值的长度是否超长(字符窜字段)的代码. 
+
+i)          最好output可以返回脚本此时的line和文件名和函数名. 这就需要改编译器. 
+
+j)          支持外挂除DataMgr之外的dll 
+
+k)       管理员工具应该是直接操作PSServer的， 不管server在本地还是远程的， 当然需要有权限控制. 
+
+l)          在DataMgr的生成insert和update语句的地方增加判断， 判断obj的type和对应xml中定义的type是否一致。 如果不判断的话， 有可能xml中写错数据类型了而PS会依旧把数据按xml中定义的类型添加得到数据库。比如xml中类型是“long”， 而脚本添加的子对象数据是字符串， 则PS就会把字符串当作long生成sql语句从而导致数据的不正确。
+
+m)      在虚拟机调用外部函数的地方添加了try和catch， 这样防止了由于外部函数的access violation 导致的ps的崩溃.
+
+n)        bug： DataObj的setleaf时没有把m_pData memset成零， 导致字符串类型的叶子结点内容buffer的空余部分字节不是零， 使FindSubObj时无法对字符串进行比较。
+
+o)        bug: 修改GenSqlSelect 函数， 使接收db数据的buffer memset成0(internal.cpp 900行);
+
+p)        提供查询语句， 格式为obj(attribute1=””, attribute2=””...).subobj1(...).subbuobj(...)......
+
+q)        加一个接口处理上述查询语句， 返回还是obj
+
+r)         建立foreign key 时添加on update cascade 
+
+s)         脚本的主动执行 
+
+t)         getuserroot不能简单的成功或失败， 应该有一个等待队列。 
+
+u)        DataDes检查class， 不允许没有key 
+
+v)        禁止所有T操作, 使用Transaction 
+
+w)       数据结构定义中如果类型是字符串的话, 长度的设定应不包括'\0' 
+
+
+
+
+
+
+</pre>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>How to write external lib for NCSE </title>
+</head>
+
+<body BGCOLOR="#ffffff" topmargin="50" leftmargin="50">
+<table width="%100">
+<tr><td><a href="index.htm">Home</a></td></tr>
+<tr><td><hr width="%100"></td></tr>
+<tr><td align = "center">How to write external lib for NCSE </td></tr>
+
+<tr><td>
+When you develop a module for c script, there are some limits you must notice.
+<ol>
+<li>	NC Script does not support Object, So you must export Interface but not class.
+<li>	Script only support 4 data type: long , short, char, float. All kinds of pointer can used as long.
+<li>	Script does not support reference. If you want to use an out parameter, you can pass the address of the variable.
+<li>	The function exported must be defined as a '__stdcall' function, if you use MSVC. 
+<li>	You must use the def file to export identifier instead of using __declspec(dllexport), if you use MSVC.
+<li>	<a href = "../download/BaseLib.zip">Here is a sample of lib used by NCSE.</a>
+</ol>
+
+
+
+
+
+<tr><td><hr width="%100"></td></tr> 
+<tr><td><i><font size=2>by <a href="mailto:jackie_juju@hotmail.com">Jackie Juju</a></font></i></td></tr> 
+</table> 
+</body>   
+</html>

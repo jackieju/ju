@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Use SE Step by step</TITLE>
+    <META http-equiv="Content-Type" content="text/html; charset=GB2312">
+    <META name="GENERATOR" content="Doc-O-Matic">
+    <LINK rel="STYLESHEET" href="default.css" type="text/css">
+
+<SCRIPT LANGUAGE="JavaScript1.2" SRC="scripts.js"></SCRIPT>
+</HEAD>
+<BODY CLASS="body">
+<TABLE BORDER="0" BGCOLOR="#AACCFF" WIDTH="100%" CELLSPACING="0" CELLPADDING="0">
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">
+<DIV CLASS="pageheadertitle">
+NCSE DOC</DIV>
+</TD><TD VALIGN="MIDDLE" ALIGN="LEFT">
+<DIV CLASS="pageheaderlinks">
+<A HREF="content.html" CLASS="link">Content</A> | <A HREF="idx.html" CLASS="link">Index</A> | <A HREF="symref.html" CLASS="link">Reference</A></DIV>
+</TD></TR></TABLE><DIV CLASS="topictitle">
+Use SE Step by step</DIV>
+<DIV CLASS="defaultsectiontextblock">
+<DIV CLASS="defaultsectiontext">
+<STRONG>Launch SE Step by step</STRONG><P CLASS="defaultsectiontext">
+Step 1: Call <A HREF="000048.html" CLASS="link">SE_Start</A>() to Start script engine&lt;&gt;<P CLASS="defaultsectiontext">
+Step 2: Call <A HREF="000031.html" CLASS="link">SE_LoadLib</A>() to Load external platform lib<P CLASS="defaultsectiontext">
+Step 3: Call <A HREF="000024.html" CLASS="link">SE_CompileAll</A>() to compile all scripts define in config file<P CLASS="defaultsectiontext">
+<P CLASS="defaultsectiontext">
+<STRONG>Run Time compile </STRONG><P CLASS="defaultsectiontext">
+Call SE_RecompileAll() or <A HREF="000023.html" CLASS="link">SE_Compile</A>() to compile at run time. Neither method will impact the running instance of a NC Function.<P CLASS="defaultsectiontext">
+<STRONG>Run an NC function</STRONG><P CLASS="defaultsectiontext">
+Step 1: You should generate a request for the script you want to execute. Step 2: call <A HREF="000025.html" CLASS="link">SE_ExecScript</A> to run the NC function.<P CLASS="defaultsectiontext">
+<STRONG>How to Generate a request</STRONG><P CLASS="defaultsectiontext">
+Step 1: Call <A HREF="000042.html" CLASS="link">SE_REQ_Create</A> to create a request, this call will return the request hanle if succeed. If you succeed in calling the <A HREF="000025.html" CLASS="link">SE_ExecScript</A>() using this request, you need not use <A HREF="000044.html" CLASS="link">SE_REQ_ReleaseReq</A>() to release it, otherwise you should release it.<P CLASS="defaultsectiontext">
+Step 2: Call <A HREF="000045.html" CLASS="link">SE_REQ_SetFn</A> To specify the NC script function name you want to call.<P CLASS="defaultsectiontext">
+Step 3: Call SE_REQ_AddXXX To Add the parameters to be passed to the NC script function.</DIV>
+</DIV>
+<DIV CLASS="copyrightnotice">
+<HR></DIV>
+</BODY></HTML>

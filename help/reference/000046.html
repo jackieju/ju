@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>SE_SetDbgCmd</TITLE>
+    <META http-equiv="Content-Type" content="text/html; charset=GB2312">
+    <META name="GENERATOR" content="Doc-O-Matic">
+    <LINK rel="STYLESHEET" href="default.css" type="text/css">
+
+<SCRIPT LANGUAGE="JavaScript1.2" SRC="scripts.js"></SCRIPT>
+</HEAD>
+<BODY CLASS="body">
+<TABLE BORDER="0" BGCOLOR="#AACCFF" WIDTH="100%" CELLSPACING="0" CELLPADDING="0">
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">
+<DIV CLASS="pageheadertitle">
+NCSE DOC</DIV>
+</TD><TD VALIGN="MIDDLE" ALIGN="LEFT">
+<DIV CLASS="pageheaderlinks">
+<A HREF="content.html" CLASS="link">Content</A> | <A HREF="idx.html" CLASS="link">Index</A> | <A HREF="symref.html" CLASS="link">Reference</A></DIV>
+</TD></TR></TABLE><DIV CLASS="topictitle">
+SE_SetDbgCmd</DIV>
+<DIV CLASS="topiclinklist">
+<A HREF="000030.html" CLASS="link">File: se_interface.h</A></DIV>
+<DIV CLASS="codeblock">
+<DIV CLASS="code">
+<PRE CLASS="code"><STRONG>void</STRONG> SE_SetDbgCmd(<STRONG>long</STRONG> lDbgCmdID, <STRONG>long</STRONG> p1, <STRONG>long</STRONG> p2, <STRONG>char</STRONG>* p3);</PRE></DIV>
+</DIV>
+<DIV CLASS="sectionheader">
+Description</DIV>
+<DIV CLASS="defaultsectiontextblock">
+<DIV CLASS="defaultsectiontext">
+put one debug command into VM. You should include the &quot;debug.h&quot; which define the debug command id<P CLASS="defaultsectiontext">
+</DIV>
+</DIV>
+<DIV CLASS="sectionheader">
+Remarks</DIV>
+<DIV CLASS="defaultsectiontextblock">
+<DIV CLASS="defaultsectiontext">
+This function is to give a debug command to VM. The VM must work in the debug mode. Following is the list of debug comand: <DIV CLASS="usertableblock">
+<TABLE CELLSPACING="0" CELLPADDING="3" BORDER="2">
+<TR CLASS="usertablerow">
+<TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="39%">
+Commond ID</TD><TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="24%">
+Function</TD><TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="11%">
+param 1</TD><TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="7%">
+param 2</TD><TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="19%">
+param 3</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="39%">
+DBGCMD_NULL</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="24%">
+No command</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="11%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="7%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="19%">
+&nbsp;</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="39%">
+DBGCMD_FORWARD</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="24%">
+go forward n instruction continuously</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="11%">
+commond number</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="7%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="19%">
+&nbsp;</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="39%">
+DBGCMD_HALT</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="24%">
+Stop VM</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="11%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="7%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="19%">
+&nbsp;</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="39%">
+DBGCMD_MEM</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="24%">
+show memory</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="11%">
+start address</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="7%">
+byte number</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="19%">
+&nbsp;</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="39%">
+DBGCMD_REG</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="24%">
+show register</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="11%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="7%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="19%">
+reg name, should one of &quot;ax&quot;, &quot;bx&quot;, &quot;cx&quot;, &quot;dx&quot;, &quot;ex&quot;, &quot;psw&quot;, &quot;ip&quot;, and the case is significant, if &quot;&quot;, show all registers</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="39%">
+DBGCMD_BP</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="24%">
+show all break point</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="11%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="7%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="19%">
+&nbsp;</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="39%">
+DBGCMD_SP</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="24%">
+add a breakpoint</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="11%">
+line number</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="7%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="19%">
+&nbsp;</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="39%">
+DBGCMD_DP</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="24%">
+remove a breakpoint</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="11%">
+line number</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="7%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="19%">
+&nbsp;</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="39%">
+DBGCMD_GO</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="24%">
+Go</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="11%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="7%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="19%">
+&nbsp;</TD></TR></TABLE></DIV>
+ VM has 8 registers: AX, BX, CX, DX is general register PSW is machine status register IP is intruction address register, storing the next instruction address</DIV>
+</DIV>
+<DIV CLASS="sectionheader">
+Parameters</DIV>
+<DIV CLASS="parametercode">
+long lDbgCmdID</DIV>
+<DIV CLASS="parameterdefaultsectionblock">
+<DIV CLASS="parameterdefaultsection">
+[in] debug command id</DIV>
+</DIV>
+<DIV CLASS="parametercode">
+long p1</DIV>
+<DIV CLASS="parameterdefaultsectionblock">
+<DIV CLASS="parameterdefaultsection">
+[in] parameter 1</DIV>
+</DIV>
+<DIV CLASS="parametercode">
+long p2</DIV>
+<DIV CLASS="parameterdefaultsectionblock">
+<DIV CLASS="parameterdefaultsection">
+[in] parameter 2</DIV>
+</DIV>
+<DIV CLASS="parametercode">
+char* p3</DIV>
+<DIV CLASS="parameterdefaultsectionblock">
+<DIV CLASS="parameterdefaultsection">
+[in] parameter 3</DIV>
+</DIV>
+<DIV CLASS="sectionheader">
+Return Value</DIV>
+<DIV CLASS="defaultsectiontextblock">
+<DIV CLASS="defaultsectiontext">
+void </DIV>
+</DIV>
+<DIV CLASS="sectionheader">
+See Also</DIV>
+<DIV CLASS="defaultsectiontextblock">
+<DIV CLASS="defaultsectiontext">
+<SPAN CLASS="brokenlink">Author: Jackie Ju</SPAN>, <SPAN CLASS="brokenlink">Date:   2002-10-24</SPAN></DIV>
+</DIV>
+<DIV CLASS="copyrightnotice">
+<HR></DIV>
+</BODY></HTML>

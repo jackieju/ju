@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Setup NCSE</TITLE>
+    <META http-equiv="Content-Type" content="text/html; charset=GB2312">
+    <META name="GENERATOR" content="Doc-O-Matic">
+    <LINK rel="STYLESHEET" href="default.css" type="text/css">
+
+<SCRIPT LANGUAGE="JavaScript1.2" SRC="scripts.js"></SCRIPT>
+</HEAD>
+<BODY CLASS="body">
+<TABLE BORDER="0" BGCOLOR="#AACCFF" WIDTH="100%" CELLSPACING="0" CELLPADDING="0">
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">
+<DIV CLASS="pageheadertitle">
+NCSE DOC</DIV>
+</TD><TD VALIGN="MIDDLE" ALIGN="LEFT">
+<DIV CLASS="pageheaderlinks">
+<A HREF="content.html" CLASS="link">Content</A> | <A HREF="idx.html" CLASS="link">Index</A> | <A HREF="symref.html" CLASS="link">Reference</A></DIV>
+</TD></TR></TABLE><DIV CLASS="topictitle">
+Setup NCSE</DIV>
+<DIV CLASS="defaultsectiontextblock">
+<DIV CLASS="defaultsectiontext">
+All NCSE components include: <DIV CLASS="usertableblock">
+<TABLE CELLSPACING="0" CELLPADDING="3" BORDER="2">
+<TR CLASS="usertablerow">
+<TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="20%">
+File Name</TD><TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="80%">
+Description</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="20%">
+SE.dll</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="80%">
+Script Engine core dll</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="20%">
+SE.h</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="80%">
+header of se.dll</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="20%">
+external lib</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="80%">
+external lib call by NewC</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="20%">
+external lib desription file</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="80%">
+descript the interface of external lib.</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="20%">
+&nbsp;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="80%">
+File format: Method Name&lt;White Space&gt;parameter number&lt;end of line&gt;</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="20%">
+NC source file</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="80%">
+source file written using NewC, will be compiled by se.dll</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="20%">
+se.cfg</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="80%">
+config file of NCSE:</TD></TR></TABLE></DIV>
+<P CLASS="defaultsectiontext">
+NCSE config file format: Group = Main <DIV CLASS="usertableblock">
+<TABLE CELLSPACING="0" CELLPADDING="3" BORDER="2">
+<TR CLASS="usertablerow">
+<TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="17%">
+Item Name</TD><TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="25%">
+Item value</TD><TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="58%">
+Description</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="17%">
+scriptpath</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="25%">
+&quot;d:seScripts&quot;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="58%">
+path of source files</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="17%">
+errorlistfile</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="25%">
+&quot;d:seerrorlist.txt&quot;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="58%">
+path name of compile-time error output</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="17%">
+workmode</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="25%">
+0</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="58%">
+VM work mode, 0 is normal, 1 is debug</TD></TR></TABLE></DIV>
+ Group = Source File List <DIV CLASS="usertableblock">
+<TABLE CELLSPACING="0" CELLPADDING="3" BORDER="2">
+<TR CLASS="usertablerow">
+<TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="12%">
+Item Name</TD><TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="17%">
+Item value</TD><TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="71%">
+Description</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="12%">
+File</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="17%">
+&quot;test.nc&quot;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="71%">
+source file name, can use relative path name or absolute path name</TD></TR></TABLE></DIV>
+ Group = Log <DIV CLASS="usertableblock">
+<TABLE CELLSPACING="0" CELLPADDING="3" BORDER="2">
+<TR CLASS="usertablerow">
+<TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="12%">
+Item Name</TD><TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="20%">
+Item value</TD><TD CLASS="usertableheadercell" VALIGN="TOP" WIDTH="68%">
+Description</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="12%">
+LogFile</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="20%">
+&quot;d:seloglog%04d%02d%02d.txt&quot;</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="68%">
+Pathname of log file, you can speicify the format of date of log file</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="12%">
+CacheMode</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="20%">
+0</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="68%">
+cache mode, 0: the log not use cache, 1: log using cache</TD></TR><TR CLASS="usertablerow">
+<TD CLASS="usertablecell" VALIGN="TOP" WIDTH="12%">
+CacheSize</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="20%">
+4096</TD><TD CLASS="usertablecell" VALIGN="TOP" WIDTH="68%">
+log cache size, this value will be ingored if CacheMode = 0</TD></TR></TABLE></DIV>
+</DIV>
+</DIV>
+<DIV CLASS="copyrightnotice">
+<HR></DIV>
+</BODY></HTML>

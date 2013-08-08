@@ -1,0 +1,671 @@
+<html>
+<body>
+<pre>
+
+[LOG]    2001-3 ~ 2001-5
+designe script syntax
+Use cocoR generate parser and lexer
+design the middle-code instruction system and virtual machine architecture.
+implement the middle-code generating.
+implement the virtual machine.
+write scripts debug tools
+write test tools
+
+[2001开发日志]    
+
+
+
+need to update:
+1.       实现脚本函数的互相调用
+1.       在compiler中加入callv, paramv, 和 endcallv指令.
+2.       当编译时发现函数名在pubfunctable中没有时, 到scriptfucntable中查找, 如找到, 则添加call指令, 操作数是CFucntion的指针.
+3.       paramv记录参数
+4.       endcallv指令负责load子函数,    把当前IP, 数据段地址和子函数指针推入call stack把当前函数指针指向栈的顶端, IP归零
+先分配内存, 然后把数据段的指针指向子函数的内存.
+       因为所有指针都是物理地址因此参数也可以是指针.
+       复制参数
+5.       return时, 把返回值赋给AX, 销毁内存, 恢复IP和数据段指针, pop出子函数指针.
+6.       要修改的地方
+       compiler
+      实现callv, paramv, endcallv, return
+       增加call stack, 当前函数指针
+       修改run函数
+
+7.       所有的return语句必须返回一个值.
+
+8.       修改ValidateAddress函数
+       使他在验证时遍历callstack中所有的虚拟内存
+
+9.       测试
+
+2.       要考虑当函数的调用参数是一个函数的返回值的情况, 比如: test1(0, test2());
+       这一情况当前VM会出错.
+       解决方法: 添加一个函数调用栈, 修改所有和函数调用有关的虚拟汇编指令的实现函数和VM的析构函数
+
+3.       被调用的脚本函数如果传出一根指针, 由于函数在return后它所有的内存已被释放,
+       因此这根指针是不可用的. 但传入的指针是可以被被调函数使用的.
+       解决方法: 待解决
+  4.       实现分配动态内存 
+5.       函数运行时的超时检测机制 
+6.       修改CDataObj, 把name属性改成ID(long 型)
+a)         修改CDataObj的实现, 数据对象这一层都使用ID来标识对象.
+b)        修改xml数据描述文件的结构, 为每个节点加入ID属性
+c)        修改DataMgr, 使这一层在DataObj和xml的基础上都使用name来标识对象
+                         i.              修改internal.cpp
+                       ii.              修改dagamgr.cpp, 是接口都使用id而不是name
+d)        修改PSCOM, 使接口使用id, 而不是name
+                         i.              注意返回的数据对象的三个预定义id-1-2-3, 在脚本中不能再用这三个值.
+e)         修改DataDes, 自动为obj生成ID, 并验证ID的唯一性, 可以为DataAccess添加NextID属性.
+                         i.              修改显示所有节点属性的函数
+                       ii.              修改添加新节点的所有函数
+                      iii.              修改生成新document的函数, 在根节点中添加属性nextID
+                     iv.              添加新节点时, 使用根节点的nextID来初始化新节点的ID属性
+                       v.              改变对象树的显示方式, dataAccess作为根节点
+                     vi.              添加log(原来没有log)和config file
+                    vii.              添加一个菜单用来验证ID的唯一性.
+                viii.              当把一个节点设置成key时, 自动把null属性生成no 
+f)         测试, 改写脚本和asp
+
+7.       调试工具 
+a)        检查是否有不规范的写法, 如创建的obj没有释放, 用户数据没有解锁等等. 
+b)        图形界面的调试工具 
+c)           
+
+8.       开放式接口: javalib方式 
+
+9.       安全性方面的考虑 
+
+10.   跨平台 
+
+a)        去掉所有使用了MFC的地方 
+
+b)        使用MinGW(gcc的Win32版本)开发和编译程序. 
+
+c)         所有使用的数据类型用另外的头文件重新自定义一下 
+
+11.   与其他主流产品的接口和通讯 
+
+12.   应用设计 
+
+a)        count字段: 
+
+一般数据结构都有count字段来记录某种ID的子对象的个数( 因为实时计算会耗时很多, 特别是当子对象是日志型数据时 ), 但一旦数据操作有失败时, 容易导致count的值和实际子对象个数不一致. 考虑只为日志型数据添加count字段, 一般数据类型不使用count字段记录个数, 添加一个接口实时取子对象个数(不能直接使用CDataObj的method, 因为不一定所有的子对象都在cache中).[12/17/2001]但是考虑到数据结构的打改动可能会使数据迁移产生困难, 因此为了先保证portfolio的移植成功, 先使用老的数据结构, 移植完后考虑数据结构的优化, 因为ps上改动应用相对较容易. 
+
+b)        [12/17/2001]考虑是否可以把DataDes和PSDebuggr, 做在一个界面中, 再加上ScriptEditor和ASPEditor,可以进一步发展成PS的二次开发环境. 
+
+13.   其他改动
+
+a)         DataDes:
+
+                         i.              添加注释
+
+                       ii.              添加ID属性
+
+                      iii.              ID的唯一性验证
+
+                     iv.              单击保存, 而不必回车
+
+                       v.              使用log
+
+                     vi.              给dataStruct 添加nextID属性
+
+                   vii.              改属性值框的右侧不超过属窗口 
+
+                  viii.              修改后如果newDocument时提示保存
+
+                     ix.              dataAccess作为根节点
+
+                       x.              null属性的默认值改为no, 因为DataMgr生成insert语句时不会有null出现
+
+                     xi.              当key=”yes”时, 自动将null改成”no” 
+
+                   xii.              当设置完name后, 自动把column设置成与name相同的值 
+
+                 xiii.                
+
+b)        DataMgr
+
+                         i.              不使用name作为dataobj的表示, 改用ID
+
+1.         修改CDataObj的实现
+
+2.         修改internal.cpp中DataMgr的底层实现
+
+3.         修改DataMgr.cpp中的接口实现
+
+                       ii.              生成insert和update语句时检测字符串字段的值中是否含有单引号, 如果有, 则替换成两个单引号
+
+                    iii.              生成insert和update语句时检测是否有不能为空的字段的为NULL(.不用了, 因为在设置obj值的所有接口中不允许pNewValue为null, 另外, 在生成sql语句的method中不会生成NULL, 因此不用加此判断) 
+
+                     iv.              添加一个接口实时取子对象个数
+
+c)        去掉CDataObj中的无用字段(offset, totallen, subobjnum), 缩短ID的长度到16bit.
+
+d)        添加两个接口Start_Transaction, End_Transaction. 
+
+                        i.              ST的时候在TRANS_APP中查找(添加)用户节点, 返回Transaction句柄. 
+
+                      ii.              读操作时, 如果所需节点不在cache中的话, 从文件中Load整个对象到TRANS_APP. 
+
+                    iii.              写操作的时候, 如果TRANS_APP中没有该文件对象存在, 则把整个文件对象load到TRANS_APP中来,, 修改该对象和cache中的数据, 设修改标志位, 生成SQL语句到TRANS_APP的SQLbuffer中. 
+
+                     iv.              ET的时候 
+
+1.         如果参数为”确认提交”, 如果修改标志被设置, 则用TRANS_APP中的对象替换chache中对象, 并存到文件, 然后提交SQLbuffer中所有SQL语句(为防止start_trans和end_trans中时间较长, 所以所有的SQL语句一次性提交)到一步更新队列. 如果异步更新失败, 从数据库重新load数据到文件和内存. 
+
+2.         如果参数为”取消提交”, 则删除TRANS_APP中相应对象和所有SQL语句. 
+
+                       v.              一个用户同时只能有一个TRANSACTION, 所以SQLbuffer只有一个. 
+
+                     vi.              TRANS_APP是一个特殊的APP cache. 
+
+e)        dm添加两个接口A_Log, A_GetTime 
+
+f)         dm添加U_GetSubObjNumByID的接口. 
+
+g)        DataDes应该有自动生成文档的功能(包括程序和设计文档), 可以用xsl加xml的方式来做, 软件默认有多个xsl可以使用, 用户也可以使用自己的xsl来显示数据结构 
+
+h)        为简化脚本编写, 脚本中不用做参数检验, 所以DM的所有接口中都严格判断参数是否正确, 以避免crash. 这次添加了写操作生成insert和update语句时检验字段值的长度是否超长(字符窜字段)的代码. 
+
+i)          最好output可以返回脚本此时的line和文件名和函数名. 这就需要改编译器. 
+
+j)          支持外挂除DataMgr之外的dll 
+
+k)       管理员工具应该是直接操作PSServer的， 不管server在本地还是远程的， 当然需要有权限控制. 
+
+l)          在DataMgr的生成insert和update语句的地方增加判断， 判断obj的type和对应xml中定义的type是否一致。 如果不判断的话， 有可能xml中写错数据类型了而PS会依旧把数据按xml中定义的类型添加得到数据库。比如xml中类型是“long”， 而脚本添加的子对象数据是字符串， 则PS就会把字符串当作long生成sql语句从而导致数据的不正确。
+
+m)      在虚拟机调用外部函数的地方添加了try和catch， 这样防止了由于外部函数的access violation 导致的ps的崩溃.
+
+n)        bug： DataObj的setleaf时没有把m_pData memset成零， 导致字符串类型的叶子结点内容buffer的空余部分字节不是零， 使FindSubObj时无法对字符串进行比较。
+
+o)        bug: 修改GenSqlSelect 函数， 使接收db数据的buffer memset成0(internal.cpp 900行);
+
+p)        提供查询语句， 格式为obj(attribute1=””, attribute2=””...).subobj1(...).subbuobj(...)......
+
+q)        加一个接口处理上述查询语句， 返回还是obj
+
+r)         建立foreign key 时添加on update cascade 
+
+s)         脚本的主动执行 
+
+t)         getuserroot不能简单的成功或失败， 应该有一个等待队列。 
+
+u)        DataDes检查class， 不允许没有key 
+
+v)        禁止所有T操作, 使用Transaction 
+
+w)       数据结构定义中如果类型是字符串的话, 长度的设定应不包括'\0' 
+
+bug: 脚本 
+
+       if (!szUsername || !szAccountName || !szAccountDesc) 
+
+出错can not perform this type cast (E110) 
+
+FAQ: 如果script经常超时（并且第一次访问该用户时是正常的， 则多半是第一个脚本中没有释放用户根） 
+
+如果使用U_AddSubLeafObj添加字符串的叶子节点时， 如果数据库中显示添加的怪字符， 则有可能是因为U_AddSubLeafObj中错误的用字符串指针的地址作为了参数， 及在char*变量名前多加了& 
+
+脚本编写注意事项：不可以将用户数据的节点直接output出去， 因为ouptut函数会该节点的ID到特定的值的. 
+
+[2002-4-18]
+
+1.       异步更新数据库错误无法控制，导致用户数据丢失， 所以添加同步更新数据库的功能 
+
+2.       添加了事务机制，脚本是面向事务和用户树的。 
+
+a)         添加了事务对象类，封装了添加和提交事务的功能 
+
+b)        事务对象中有一个临时对象池， 存放脚本生成的临时对象， 释放事务时释放临时对象。这样脚本编写就不必关注内存泄漏问题。 
+
+c)        修改DataObj的树的机制。 一个节点可以被多个节点引用用为子节点， 但他的父节点指针只有一个, 也就是他只有一个父亲， 他只能被自己的父亲释放，而其他引用他为子节点的对象不能释放他。这样可以保证临时对象被插入用户树后不会被释放 
+
+d)        添加了执行一组SQL语句的接口， 执行失败会rollback， 并删除cache。 
+
+e)         添加了删除用户内存Cache和文件Cache的接口，如果用户树正在被使用， 则设置用户根的非同步标志，下次访问用户根时发现非同步会重新到数据库取用户数据。 
+
+3.       增删和修改了DataMgr的接口, 脚本的编写方式做了改动. 
+
+a)         大部分的更新操作和生成临时对象的操作都需要传入事务句柄 
+
+b)        U_GetUserRoot需要传入事务句柄的地址， 申请分配事务句柄 
+
+c)        U_ReleaseUserRoot也要传入事务句柄，释放事务对象 
+
+d)        如果脚本中更新操作， 所有的更新操作在U_CommitTrans以后才被执行， 否则所有操作在U_ReleaseUserRoot时被丢弃。 
+
+e)         U_AddUserRoot不需要传入事务句柄， 因为他是立即更新数据库的。      
+
+f)         所有生成临时对象的操作必须传入事务句柄， 这样在释放事务对象的时候才能释放临时对象，因此不在需要T_DeleteObj, 脚本编写者不再需要考虑内存泄漏。 
+
+g)        因为应答给Client的对象是一个临时对象， 所以U_ReleaseUserRoot后就不能在使用， 因此应答之前不能调用U_ReleaseUserRoot. 
+
+h)        保留了异步更新数据的功能，如果传入的事务句柄为空，则进行异步更新。异步更新不等待数据库操作结果而立即返回， 因此速度较快， 适用于那些简单而不易出错并且更新失败也不会造成严重后果的操作。 
+
+4.       DataMgr所有的spirnf改成了_snprintf 
+
+5.       拼接sql语句的地方加了buffer长度的判断,保证不会越界 
+
+6.       从dataobj到都DataMgr增加了按两个条件排序子节点的功能， 如果第一个条件判断结果为＝＝时，使用第二个条件， 用来解决同一天的交易排序不正确的问题。 
+
+7.       如果脚本编译有错， 则service启动失败. 
+
+8.       脚本引用逻辑的修改 
+
+a)         用户第一次登陆时写操作过多， 数据库压力过大, 因此修改PF_GetCostSetting函数。 
+
+b)        AddDeal函数中股票按交易时间和交易ID排序 
+
+  
+
+  
+
+[2002-4-25 ]
+
+1.       修改数据库重连机制,  只有当发生了配置文件中指定的错误才会重新连接, 因为经常重连影响效率. 
+
+2.       修改删除和添加用户根的机制. 
+
+a)         添加用户根(memcaceh::adduser)时可以选择是否立即取得用户根， 从而不让其他人有机会先获得用户根，以保证U_AddUserRoot函数的正确性. 因为U_AddUserRoot是先把用户根插入后再更新数据库， 所以一旦更新失败，就必须删除用户根。 
+
+  
+
+3.       第一个实时报警无法修改(原因： isapit再ShowAdvAlerts函数判断如果lAlertID＝＝0的话就不去server请求数据而是直接显示创建报警的页面。而用户创建的第一个报警的ID是0) 
+
+  
+
+4.       划入资金后无法修改,  O_Output的返回值应该是零， 写成了-1; 并且只修改了cash没有修改成交明细。 
+
+5.       只有当用户新建第一个帐户时才添加用户根， 防止过多的不使用pf的用户数据。 
+
+  
+
+6.       adduserroot当插入cache但还没有进入数据库时是用户的cache的sync=false, 防止在更新数据库时程序意外中止, 导致cache和数据库不一致 
+
+  
+
+7.       添加VMException供外部接口使用, 使VM可以了解外部功能函数中出现的异常并和脚本的行数和在一起记下日志, 以便管理员知道脚本的哪一行的外部函数调用出现问题.. 
+
+8.       在DM的所有接口中检查小于ffff但不等于零的指针, 如果有则throw VMException 
+
+9.       添加了一个重新计算帐户cash的脚本, 和调用改脚本的asp, 用于对帐户资金不正确的用户进行修正. 
+
+10.   为防止永久等待引起的进程无法退出或处理线程的死等, 改了userMger中waittoread的等待时间, 原来都是-1(无穷大), 
+
+  
+
+PS2.0S需要改进的地方:
+
+1.       二次开发环境
+
+a)         脚本编译环境
+
+b)        调试环境.
+
+c)        图形界面的远程手工制作请求并发送的控制台。
+
+d)        ps控制端口, 使用简单的telnetserver
+
+e)         DataDes
+
+                         i.              生成建表脚本时添加索引的创建，注意外键的顺序和index一致.
+
+2.       外挂除datamgr以外的用户DLL, 让开发者添加插件。
+
+3.       编译器：
+
+a)         预编译常量__FILE__, __LINE__, __FUNCTION__, __DATE__, __TIME__,
+
+b)        调用外部函数时校验参数个数和类型，服务崩溃经常是因为传错参数。
+
+4.       支持CLOB
+
+5.       跨平台
+
+6.       性能扩展性。
+
+7.       java客户端
+
+8.       和其他主流产品的接口和通信。
+
+9.         
+
+  
+
+  
+
+[2002-4-30]
+
+1.       service使用了sslib
+
+2.       compiler得se_handlerequest加了个参数控制是否是debug模式
+
+3.       service中建立了debug server, 使用WorkFuncDbg作工作参数.
+
+  
+
+[2002-12-5]
+
+换上新版本的ps后有内存泄漏
+
+  
+
+远程修改script, 并重新编译
+
+远程查看log
+
+不同应用的脚本跑在不同的进程中
+
+前台应用应该把出错信息显示在页面上, 这样当出现问题时便于知道问题的所在
+
+远程修改配置并使其生效
+
+去掉文件cache, 因为难以管理, 比如说限制大小, 分组, 查询, 按应用删除
+
+没有利用数据库的能力, 比如说排序
+
+  
+
+文件cache: 
+
+每个应用由一组节点组成, 每个几点都要指定位置, 尾节点不能指定最大空间, 其余节点都要指定
+
+最大空间.如portfolio.0000, portfolio.0001...最多有1000个节点.
+
+文件是DataObj生成的数据.DataObj必须支持生成分卷的文件.
+
+  
+
+把数据层和object层分开 
+
+  
+
+支持timestamp, 
+
+1.       修改select, update, insert的地方.
+
+大表的处理 
+
+多个线程访问一个用户的根时会导致大量的GetUserRoot操作的失败, 改成wait方式取用户的根, 但是改成wait后会导致大量用户操作的超时. 
+
+cahce机制: 内存cache中存放的应该只是最经常用的数据, 不应该放一个select的所有记录. 
+
+  
+
+降低db错误的log级别, 提高object操作失败的错误级别
+
+  
+
+  
+
+文件load完以后要释放.
+
+  
+
+修改迁移工具, 不能一遍import一边delete
+
+说明:  如果非正常退出, 会造成用户数据被删掉而没有import
+
+  
+
+在http监控中使用模板技术
+
+  
+
+  
+
+  
+
+  
+
+管理员脚本(用户可以自己编写来控制ps)
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+ 
+http admin(根据参数调用一个无参脚本)
+ 
+脚本返回一个页面(这个页面如果调用脚本)
+ 
+  
+  
+ 
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+function name 可以大于20个字节.
+
+  
+
+ps studio加一个窗口显示日志
+
+  
+
+trace的日志输出到单独文件.
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  //////////////////////////////////////////////////////////////
+// #define SE_VERSION _T("2.0.0 0010B")
+// ------------------------------------------
+// 这个版本包含以下修改
+// 1. CVirtualMachine::_endcallpub函数在调用了外部公用函数后
+// catch(...){throw;},这样可以让SE记录发生exceptioin的脚本函
+// 数和行数，同时又可以用windbg的dump文件查找具体出错地点。
+//
+// 2. CVirtualMachine::run()在根据debug命做相应处理时，
+// CVirtualMachine::m_DgbCmdLock没有出锁。
+// 
+// 3. 添加了获取当前调试的虚拟机的寄存器和内存内容的接口
+// 4. 添加了启动时的versioin infomation log
+//////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////
+// #define SE_VERSION _T("2.0.0 0011B")
+// ------------------------------------------
+// 这个版本包含以下修改
+// 1. 编译时遇到popdigit失败时没有做出错处理， 下面的代码引用
+// dt1时发生accesse violation。 修改： 在所有popdigit失败的地方
+// 记录出错信息并退出。
+// 2. 在pushdigit时校验数据类型， 以便当代码某处没有给dttype赋值
+// 时发现bug。
+// 3. 修改数据类型定义， first type为0, 0 是dummytype， 就是没有
+// 实际意义的数据类型， 是用来填充操作数栈的。
+// 4. NeedCast函数在判断dt1的数据类型时，如果是dummytype， 就返回－1
+// 表示不需要修改数据类型
+//////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////
+// #define SE_VERSION _T("2.0.0 0012B")
+// ------------------------------------------
+// 这个版本包含以下修改
+// 1. 修改了CVirtualMachine::OutputMemroyToFile函数， 添加了
+// CVirtualMachine::DumpToFile函数。当脚本发生Exception时dump
+// 虚拟机的内存到文件。
+//////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////
+// #define SE_VERSION _T("2.0.0 0013B")
+// ------------------------------------------
+// 这个版本包含以下修改
+// 1. CVirtualMachine添加了一个变量m_bDebugBreak表示调试状态VM
+// 是否正在执行还是已经停下来等待调试命令的输入. 
+// 2. 添加了接口IsDebugBreak来获取VM的调试状态
+// 3. 添加了jni的接口(SE_IsDebugBreak)来获取当前调试的VM的调试状态。
+// 4. OutputMemToFile中输出到文件的内容增加了当前执行的行数和寄存器值
+// 5. 发现bug， java_interface(SE_1GetPFunctionTable)中调用CScriptFuncTable::GetFunction()
+// 后没有用ReleaseFunc, 导致表被死锁。已修改。
+// 6. 发现bug， compiler在分析函数调用时，如果没有参数，就不会调用ActualParams(v),
+// 因此不会校验参数个数, 修改后， 在FunctionCall(v)中校验参数个数.
+//////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////
+// #define SE_VERSION _T("2.0.0 0014B")
+// ------------------------------------------
+// 这个版本包含以下修改
+// 1. OutputMemToFile中输出到文件的内容修改了
+// 2. 修改bug: 当catch到CVMException时输出log的代码有误.
+// 3. 修改了断点的数据结构，用一个结构存放断点信息， 断点信息
+// 包括函数名和IP值。
+
+//////////////////////////////////////////////////////////////
+// #define SE_VERSION _T("2.0.0 0015B")
+// ------------------------------------------
+// 1. 去掉了对"windows.h"的include
+// 2. 添加了CVMManager. 
+//////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////
+// #define SE_VERSION _T("2.0.0 0016B")
+// ------------------------------------------
+// 1. modify CVirtualMachine::Reset(), make it more safe
+// 2. 添加了se_interface, place all interface definition in the file
+// 3. 修改了Java调用接口中取字符串的方式，解决了传递中文字符串的问题。
+// 4. 纠正了SE_REQ_SetFnID函数的bug: 把hReq作为参数传给了SetFuncID
+// 5. 纠正了SE_REQ_EXECScript的错误: 生成参数块时没有把原来的hSession去掉.
+// 6. 修改了CPubFunction::AddFunction, 原来的代码似乎不安全
+// 7. 1668~1680@cp.cpp有错, 把dt写成了td1, 而且dt没有初始化
+// 导致如果if()中有浮点数的关系运算的话不能编译通过.
+//////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////
+// #define SE_VERSION _T("2.0.0 0016B")
+// ------------------------------------------
+// 1. fixed a bug in function "OutputMemToFile" which cause crash
+// 2. add a interface to CCMManager "GetActiveVMNum" and the corresponding
+// interface to dll
+//
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+// #define SE_VERSION "2.0.0 0017B"
+// ------------------------------------------
+// 1. Modify the CVMManager class: Add the constraint of vm number
+// 2. modify the CVMManager class: modify the ReleaseVM(), StopAllVM()
+// 3. modify the CVirtualMachine: use event to control the vm runng states
+// 4. modify the SE_GetVersion Method
+//////////////////////////////////////////////////////////////
+
+// #define SE_VERSION "2.0.0 0018B"
+// ------------------------------------------
+// 1. fix a bug in GetFreeVM(). original code use the reference between 
+// two vector.
+// 2. change type of CVMManager::m_ActiveVMList from vector to list, because
+// it will use erase(), which is a lag operation in vector. Due to this, ReleaseVM()
+// was modified.
+//////////////////////////////////////////////////////////////
+
+/#define SE_VERSION "2.0.0 0019B"
+// ------------------------------------------
+// 1. (2003-03-04)
+// Add another param "long lFlag" to function ExecScript(), so that
+// CVMManager can provide tow way to run a script: in the same thread 
+// or in another thread
+// 2. (2003-02-28)
+// add variable infomation to compilatioin output. 
+// modify by Zhang Yuan
+// changed files:
+// cp.cpp;cs.cpp;CR_ERROR.h;CR_ERROR.cpp;CR_ABS.h
+// 3. (2003-06-12)
+// move logic from cp.cpp to ncpp.atg
+//////////////////////////////////////////////////////////////
+
+
+#define SE_VERSION "2.0.0 0020B"
+// ------------------------------------------
+//	1. modify conctructor of CVirtualMachine, create m_Stopped with
+// initial status false. If initial status is true, the HandleRequest
+// thread will hang up on the CVirtualMachine::Reset() call in case 
+// it before run(). 
+//
+// 2. (2003-06-20)
+// Transplant SE to AIX on IBM RS60000.
+// Every thing is smooth but the assembly language. the PowerPC assembly system is so defferent from
+// the x86 family. And article online about AIX assembly languag is lacking. xlC and dbx is not very
+// friendly. And xlC dese not support the inline assembly, so I write the .s file and compile it to .o
+// using as, then link it in makefile
+// 
+// 3.(2003-07-12)
+// Fix a bug on IBM AIX. the LoadRequest and GenerateReq of Request.cpp use
+// the actual number of bytes but not the sizeof(). so on AIX, the request package
+// can not be parsed and generated correctly.
+//
+// 4. (2003-07-14)
+// Fix another bug on IBM aix.
+// change the checkpoint 2 value from 0xfff to -1. 
+// I thought that the value 0xffff is not equal to -1 on aix, because the short is 4 bytes long
+//////////////////////////////////////////////////////////////
+
+// #define SE_VERSION "2.1.0 0000B"
+// ------------------------------------------
+// 1. move SE_HandleRequest interface to service module.
+// 2. delete SE_ExecScript() interface and add tow interfaces:
+// SE_RunScript()
+// SE_ExecScript()
+// 3. chang the return type of CVirtualMachine::LoadFunction() and CVirtualMachine::_LoadFunc and AddExternalSpace from BOOL to void, and change the return type of CVirtualMachine::AttachParam() from BOOL to long
+// 4. add an interface "SE_AddPubFunc"
+// 5.修改CVMManager::ExecScript, 使其支持在当前线程中运行脚本。
+// 添加CVMManager::PrePareVM，负责分析请求和获取虚拟机。
+// 添加CVMManager::UnPrepareVM， 负责运行完脚本后的处理。
+// 删除SE_HandleRequest
+// 6.   modify AddFunction()
+
+
+//////////////////////////////////////////////////////////////
+#define SE_VERSION "2.1.0 0001B"
+// ------------------------------------------
+//  1. modify the AttachParam()  when check size, the size_t must be equel to function specification
+//  2. 	modiy the ActualParameters() function:
+//	remove the code for checking parameter number of function call
+//	add check for parameter at the end of the function
+
+//  --------
+//  2003-07-30
+//  create a function SELog() to printf log , if the pLog param passed into SE_Start()
+//  is NULL, the SE will use SELog as g_pLogFunc 
+//////////////////////////////////////////////////////////////
+
+  
+
+  
+
+  
+</pre>
+</body>
+</html>

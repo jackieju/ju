@@ -1,0 +1,101 @@
+<html>
+
+<head>
+<title></title>
+</head>
+
+<body BGCOLOR="#ffffff" topmargin="50" leftmargin="50">
+<table width="%100">
+<tr><td><a href="index.htm">Home</a></td></tr>
+<tr><td><hr width="%100"></td></tr>
+<tr><td align = "center">Syntax Specification of NC</td></tr>
+<tr><td>
+Index:
+<ol> 
+			<li><a href="#1">Overview</a></li> 
+			<li><a href="#2">Syntax Specification</a></li> 
+			<li><a href="#3">Data Type Suported</a></li> 
+			<li><a href="#4">Data Type Cast</a></li> 			
+			<li><a href="#6">Operator Supported</a></li>
+			<li><a href="#7">Function Call</a></li>
+			<li><a href="#8">Other</a></li>
+
+		</ol> 
+</td></tr>
+<tr><td><hr width="%100"></td></tr>
+<tr><td>
+
+<ol>
+
+<a name = "1"/>
+<li><h3>Overview</h5></li>
+The NC language is a reduced C language. It's syntax is a subset of C syntax. So some features of C are not supported by
+NC language, which should be take a look.
+<p>
+<a name = "2"/>
+<li><h3>Syntax Specification</h5></li>
+The syntax is defined in <a href= "nc.atg">atg file</a>(used by cocoR).<br>
+<b>
+NOTICE: 
+Although the <font color="#ff0000"> switch </font> sentence can be parsed, but it was not be implemented, so you can not use switch sentence.
+</b>
+<p>
+<a name = "3"/>
+<li><h3>Data Type Supported</h5></li>
+char(1 bytes), short(2 bytes), long(4 bytes), float(4 bytes)
+<b>
+NOTICE: 
+<font color="ff0000">unsigned types</font> are not supported by NC.
+</b>
+<br>
+<a name = "4"/>
+<li><h3>Data Type Cast</h5></li>
+NC noly support the implicit type cast, but not the explicit cast.<br>
+
+<p>
+<a name = "6"/>
+<li><h3>Operator Supported</h5></li>
+<pre>
+Mathematic	:	+ - * / % ++ --
+Logical		:	< > <= >= ==
+Relational	:	&& || !
+others		:	& ~
+</pre>
+<p>
+<a name = "7"/>
+<li><h3>Function Call</h5></li>
+There are tow kinds of function: NC Function and external lib function<br>
+If call a NC function, the called function must be defined before the caller.<br>
+If call a external lib function, the called function must be loaded before the <br>
+caller be compiled.
+
+<p>
+<a name = "8"/>
+<li><h3>Other Specifications</h5></li>
+<ol>
+	<li>The variables can only be defined in the start of the function, and the <br>
+	variable can not be initialized while being difined.</li>
+	
+	<li>The following operators are not supported:<br>
+	+=, -=, *=, /=, %=, |, &</li>
+	
+	<li>class and structure are not supported in the version</li>
+	
+	<li>swith statement are not supported</li>
+	
+	<li>bit operators are not supported</li>
+	
+	<li>dose not support new and delete</li>
+	
+	<li>dose not support comma expression</li>
+</ol>
+</ol>
+
+
+
+
+<tr><td><hr width="%100"></td></tr> 
+<tr><td><i><font size=2>by <a href="mailto:jackie_juju@hotmail.com">Jackie Juju</a></font></i></td></tr> 
+</table> 
+</body>   
+</html>

@@ -1,0 +1,81 @@
+要想享受人生， 就要有健康的身心， 所以一定要对自己好一点.
+
+.....................
+long term:
+.....................
+update resume, hunt job native and h1b
+homepage
+English
+
+.....................
+short term:
+.....................
+ncse 1.0
+Immigration
+留学canada, 然后移民。
+h1b
+GRE|TOFEL
+
+
+
+
+.....................
+share ware
+.....................
+1. apply net space
+2. apply domain name
+3. register at qwerks.com and emetrix.com, tucows.com
+4. register onto google, yahoo
+
+.....................
+NCSE
+.....................
+enhance the introduction document:
+1. system description
+2. sample
+
+nc.exe:
+	nc.exe   		nc.exe, lib
+scripts -------> middle code ----------> CFunction
+
+se.dll:
+LoadLib()->compile()->exec()
+	compile()		link()			exec(), lib
+scripts ---------> CFuntion -----------------> fill fn----------------->
+
+native key word:
+when compiling, using _callpub, but fill the funciton entry with NULL and function name. When Linking, find the fn and fill the real address.
+
+
+
+It is a engine for compile a c sourc file and run the target file on its virtual machine. 
+You can find it easier and more quicker than java.
+U can embed SE into your software to make it more extendable and flexible.
+
+
+1. write doc(1week)
+help(using doc_o_metic)
+sample
+how to write script, compile script and run script
+how to write lib for se
+
+
+
+
+
+
+
+
+.....................
+memo
+.....................
+apply the school report card
+write PS
+do notarization
+
+
+
+
+
+
+

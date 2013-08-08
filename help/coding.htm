@@ -1,0 +1,160 @@
+<html>
+
+<head>
+<title></title>
+</head>
+
+<body BGCOLOR="#ffffff" >
+<table width="%100">
+<tr><td><a href="index.htm">Home</a></td></tr>
+<tr><td><hr width="%100"></td></tr>
+<tr><td align = "center">脚本函数编写指南
+</td></tr>
+<tr><td>
+目录:
+<ol>
+	<li><a href="#1">一个简单的例子</a>　</li>
+	<li><a href="#2">使用脚本语言存取PS数据的一般步骤</a>　</li>
+	<li><a href="#3">与PS2客户端进行交互</a>　</li>	
+</ol>
+</td></tr><tr><td>
+<tr><td>
+<ol>
+	<li><a name="#1"/><h3>一个简单的例子</h3>
+	<pre>
+为了具体说明脚本函数的编写, 先看一个简单的例子, 这个函数的功能是在自选股应用中设置用户的默认default自选股, 其中调用的外部函数说明详见DataMgr接口说明
+<pre>
+//设置defaultID 
+
+long wl_SetDefGrpID(long hSession, char* szUsername, long lGroupID)//函数头 
+
+{
+
+	//变量定义(必须放在函数开头, 并且不能赋初值) 
+
+       long* pRoot;//用户数据的根节点 
+       long  exist;
+       long* pGroup;
+       long* pTempStock;
+       long* pStock;
+       long  lStockNum;
+       long  i;
+       long *pRetObj;
+       long  lRet;
+       long  lGrpID;
+       long  lGroupNum;
+       long  id_DefaultGroupID;
+	id_DefaultGroupID = 9;
+
+       /*取用户某个应用的数据对象的根节点szUsername是用户名,”watchlist”是应用名, exist的值显示该用户是否存在*/ 
+       pRoot = U_GetUserRoot(szUsername, "watchlist", &exist);
+       if (!pRoot)
+
+       {
+
+	/*
+		返回错误代码和错误信息, 这是和PS的clientCOM约定的返回格式 
+		hSession是回话句柄, 是server用它来和client通信 
+		-1是出错代码, 它的含义按和客户端的约定解释 
+		第三个参数是错信息 	
+		注: O_Output是外部公用函数 
+	*/ 
+
+              O_Output(hSession, 0, -1,  "wl_SetDefGrpID:can not get user root");
+
+              /*退出脚本函数*/ 
+
+		return -1;
+
+       }
+
+	/*调用函数设置defaultID*/ 
+
+       if (!U_SetSubObjValue(szUsername, pRoot, id_DefaultGroupID, 0, &lGroupID, "long", 1))
+
+       {
+
+	/*用户数据使用完后必须释放, 因为使用时会对该用户加锁的*/ 
+
+              U_ReleaseUserRoot(szUsername, "watchlist", pRoot);
+
+              O_Output(hSession, 0, -1,  "set <DefaultGroupID> failed");
+
+              return;
+
+       }
+
+  
+
+	U_ReleaseUserRoot(szUsername, "watchlist", pRoot);
+
+	/*返回成功的信息*/ 
+
+       O_Output(hSession, 0, 0,  "OK");
+
+	/*退出脚本函数*/
+
+       return 0;
+
+}
+</pre>
+只有您有使用c的经验就很容易掌握它. 它只不过有一些特殊的规定而已.
+
+	</pre>
+	</li>
+	<li><a name="#2"><h3>使用脚本语言存取PS数据的一般步骤</h3>
+	<ol type="a">
+<li>        <b>第1步</b>： 取得该应用的该用户的数据对象根节点
+
+在PS2中用户的所有数据对前台应用来说, 都是一个个数据对象.
+
+数据对象分两种, 一种是简单的数据对象, 它有数据内容, 数据类型.
+
+另一种是复杂数据对象, 它有许多的子对象, 但没有数据内容, 没有数据类型.
+
+一个应用一般是数据对象组成的一棵树, 它的叶子节点都是简单对象, 它的中间节点(包括根节点)都是复杂对象.
+
+对应用的数据对象树的描述可以从数据结构描述文件获得. 它是一个xml文件.
+</li>
+<li>
+        <b>第2步</b>： 找到要读写的节点. 使用DataMgr提供的接口, 可以从根节点, 一层层往下找, 找到目标节点. 这些接口基本都以U_开头.
+</li><li>
+        <b>第3步</b>： 使用DataMgr提供的接口, 执行数据操作, 可以删除, 修改, 读取数据内容等等.
+</li><li>
+        <b>第4步</b>： 返回数据和成功失败信息, 然后退出函数. 当操作过程中发生错误, 也必须返回数据和成功失败信息.
+</li>
+</ol>
+<p></P>
+<p></P>
+	</li>
+	<li><a name="#3"><h3>与PS2客户端进行交互</h3>
+<pre>
+客户端的请求通过PS分析后调用脚本函数, 脚本执行完时可以返回数据给client.
+
+返回数据的格式:
+
+返回数据也是一个数据对象, 它最多有三个子对象:
+
+出错代码(id = 0xffffffff)
+
+返回数据对象(id = 0xfffffffe)
+
+错误信息(id = 0xfffffffd)
+
+其中出错代码是必须的, 它是识别此次数据存取成功和失败的唯一依据.
+
+ro是脚本返回的数据内容.
+
+em是返回的出错信息, 辅助表达出错原因.
+
+DM提供了Output函数, 它的第一个参数是回话句柄, 第二个参数是ro的句柄, 第三个参数是rc, 第四个参数是em
+	
+	</pre></li>
+</ol>
+</td></tr> 
+<tr><td><hr width="%100"></td></tr> 
+<tr><td><i><font size=2>如果您对该文档有问题或建议，请联系<a href="mailto:whu.ju@stockstar.com">居卫华</a>或<a href="mailto:zw.gong@stockstar.com">龚张伟</a></font></i></td></tr> 
+</table> 
+   
+</body>   
+</html>

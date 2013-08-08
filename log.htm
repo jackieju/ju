@@ -1,0 +1,338 @@
+<!--
+<html>
+
+
+<head>
+<META NAME="GENERATOR" Content="Microsoft FrontPage 4.0">
+<title>log</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body bgcolor="#ffffff">
+
+<object id=msodsc classid=CLSID:0002E530-0000-0000-C000-000000000046></object>
+<p>
+
+
+<p></p>
+
+<table width="600">
+<tr><td><a href="main.htm">Home</a></td></tr>
+
+
+<tr><td align = "center"><font size=5> Development Log</font></td></tr>
+<tr><td><hr width="%100"></td></tr>
+</table>
+
+
+
+<p></p>
+
+<table  border=0 bordercolor="2222ff" width = "%80">
+<tr><td align=""  bgcolor ="#eeeeff">2001/03 - 2001/04</td></tr>
+<tr>
+<td>
+1. use cocoR to build semantic parser for c language<br>
+2. design the virtual machine and assembly system<br>
+3. write code to generate assembly code<br>
+4. do test<br>
+</td></tr>
+<tr><td></td><td></td></tr>
+</body>
+</html>
+
+-->
+<html>
+
+<head>
+</head>
+
+<body>
+<pre>
+
+[LOG]    2001
+1. use cocoR to build semantic parser for c language
+
+2. design the virtual machine and assembly system
+
+3. write code to generate assembly code
+
+4. do test
+
+
+[LOG]    2001
+
+1. 实现脚本函数的互相调用
+	1. 在compiler中加入callv, paramv, 和 endcallv指令.
+
+	2. 当编译时发现函数名在pubfunctable中没有时, 到scriptfucntable中查找, 如找到, 则
+	添加call指令, 操作数是CFucntion的指针.
+
+	3. paramv记录参数
+
+	4. endcallv指令负责load子函数, 
+	把当前IP, 数据段地址和子函数指针推入call stack, 把当前函数指针指向栈的顶端, IP归零
+	先分配内存, 然后把数据段的指针指向子函数的内存.
+	因为所有指针都是物理地址因此参数也可以是指针. 
+	复制参数
+
+	5. return时, 把返回值赋给AX, 销毁内存, 恢复IP和数据段指针, pop出子函数指针.
+	
+	7. 要修改的地方
+	compiler
+	实现callv, paramv, endcallv, return
+	增加call stack, 当前函数指针
+	修改run函数
+	
+	8. 所有的return语句必须返回一个值.
+	
+	9. 修改ValidateAddress函数
+	使他在验证时遍历callstack中所有的虚拟内存
+
+2.  要考虑当函数的调用参数是一个函数的返回值的情况, 比如: test1(0, test2());
+	这一情况当前VM会出错.
+	解决方法: 添加一个函数调用栈, 修改所有和函数调用有关的虚拟汇编指令的实现函数和VM的析构函数
+
+3.  被调用的脚本函数如果传出一根指针, 由于函数在return后它所有的内存已被释放, 
+	因此这根指针是不可用的. 但传入的指针是可以被被调函数使用的.
+	解决方法: 待解决
+
+4. 实现分配动态内存
+
+5. 函数运行时的超时机制
+
+6. 开放式接口: using jni to support java interface, so user can use SE in java Environment.
+
+7. 安全性方面的考虑
+
+8. 跨平台(linux)
+
+9. 与其他主流产品的接口和通讯
+
+</pre>
+<p class="MsoNormal"><span lang="EN-US" style="color:red">bug: </span><span style="font-family:宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;mso-hansi-font-family:    
+&quot;Times New Roman&quot;;color:red">脚本</span><span lang="EN-US" style="color:red"><o:p>
+</o:p> 
+</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="color:red"><span style="mso-tab-count:
+1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>if (!szUsername || !szAccountName      
+|| !szAccountDesc)<o:p>     
+</o:p>     
+</span></p>
+<p class="MsoNormal"><span style="font-family:宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;
+mso-hansi-font-family:&quot;Times New Roman&quot;;color:red">出错</span><span lang="EN-US" style="color:red">can      
+not perform this type cast (E110)<o:p>     
+</o:p>     
+</span></p>
+<p class="MsoNormal"><span lang="EN-US" style="color:lime">FAQ: </span><span style="font-family:宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;mso-hansi-font-family:
+&quot;Times New Roman&quot;;color:lime">如果</span><span lang="EN-US" style="color:lime">script</span><span style="font-family:宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;mso-hansi-font-family:
+&quot;Times New Roman&quot;;color:lime">经常超时（并且第一次访问该用户时是正常的，</span><span style="color:lime"> 
+</span><span style="font-family:宋体;mso-ascii-font-family:
+&quot;Times New Roman&quot;;mso-hansi-font-family:&quot;Times New Roman&quot;;color:lime">则多半是第一个脚本中没有释放用户根）</span><span lang="EN-US" style="color:lime"><o:p>
+</o:p> 
+</span></p>
+<p class="MsoNormal"><span style="font-family:宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;
+mso-hansi-font-family:&quot;Times New Roman&quot;;color:lime">如果使用</span><span lang="EN-US" style="color:lime">U_AddSubLeafObj</span><span style="font-family:
+宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;mso-hansi-font-family:&quot;Times New Roman&quot;;
+color:lime">添加字符串的叶子节点时，</span><span style="color:lime"> 
+</span><span style="font-family:宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;mso-hansi-font-family:
+&quot;Times New Roman&quot;;color:lime">如果数据库中显示添加的怪字符，</span><span style="color:lime"> 
+</span><span style="font-family:宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;mso-hansi-font-family:
+&quot;Times New Roman&quot;;color:lime">则有可能是因为</span><span lang="EN-US" style="color:lime">U_AddSubLeafObj</span><span style="font-family:宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;mso-hansi-font-family:
+&quot;Times New Roman&quot;;color:lime">中错误的用字符串指针的地址作为了参数，</span><span style="color:
+lime"> </span><span style="font-family:宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;
+mso-hansi-font-family:&quot;Times New Roman&quot;;color:lime">及在</span><span lang="EN-US" style="color:lime">char*</span><span style="font-family:宋体;mso-ascii-font-family:
+&quot;Times New Roman&quot;;mso-hansi-font-family:&quot;Times New Roman&quot;;color:lime">变量名前多加了</span><span lang="EN-US" style="color:lime">&amp;<o:p>
+</o:p>     
+</span></p>
+<p class="MsoNormal"><span style="font-family:宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;
+mso-hansi-font-family:&quot;Times New Roman&quot;;color:red">脚本编写注意事项：不可以将用户数据的节点直接</span><span lang="EN-US" style="color:red">output</span><span style="font-family:宋体;
+mso-ascii-font-family:&quot;Times New Roman&quot;;mso-hansi-font-family:&quot;Times New Roman&quot;;
+color:red">出去，</span><span style="color:red"> </span><span style="font-family:
+宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;mso-hansi-font-family:&quot;Times New Roman&quot;;
+color:red">因为</span><span lang="EN-US" style="color:red">ouptut</span><span style="font-family:宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;mso-hansi-font-family:
+&quot;Times New Roman&quot;;color:red">函数会该节点的</span><span lang="EN-US" style="color:red">ID</span><span style="font-family:宋体;mso-ascii-font-family:&quot;Times New Roman&quot;;mso-hansi-font-family:
+&quot;Times New Roman&quot;;color:red">到特定的值的</span><span lang="EN-US" style="color:red">.<o:p>
+</span></p> 
+<pre>
+</pre>
+<p>　</p>
+<p><font COLOR="#a000a0">SE_VERSION</font> <font COLOR="#a000a0">_T</font>(&quot;2.0.0  
+0010B&quot;)</p>
+<p>------------------------------------------</p>
+<p>这个版本包含以下修改</p>
+<p>1. CVirtualMachine::_endcallpub函数在调用了外部公用函数后</p> 
+<font COLOR="#0000ff">
+<p>catch</font>(...){<font COLOR="#0000ff">throw</font>;},这样可以让SE记录发生exceptioin的脚本函</p>
+<p>数和行数，同时又可以用windbg的dump文件查找具体出错地点。</p>
+<p>2. CVirtualMachine::run()在根据debug命做相应处理时，</p> 
+<p>CVirtualMachine::m_DgbCmdLock没有出锁。</p>
+<p>3.  
+添加了获取当前调试的虚拟机的寄存器和内存内容的接口</p>
+<p>4. 添加了启动时的versioin infomation <font COLOR="#808080">log</p> 
+</font><font COLOR="#008000">
+<p>///////////////////////////////////////////////////////////</p>
+<p>///////////////////////////////////////////////////////////</p>
+</font>
+<p><font COLOR="#a000a0">SE_VERSION</font> <font COLOR="#a000a0">_T</font>(&quot;2.0.0 
+0011B&quot;)</p>
+<p>------------------------------------------</p>
+<p>这个版本包含以下修改</p>
+<p>1. 编译时遇到popdigit失败时没有做出错处理，  
+下面的代码引用</p>
+<p>dt1时发生accesse violation。 修改： 在所有popdigit失败的地方</p> 
+<p>记录出错信息并退出。</p>
+<p>2. 在pushdigit时校验数据类型， 以便当代码某处没有给dttype赋值</p> 
+<p>时发现bug。</p>
+<p>3. 修改数据类型定义， <font COLOR="#808080">first</font> <font COLOR="#808080">type</font>为0,  
+0 是dummytype， 就是没有</p> 
+<p>实际意义的数据类型， 是用来填充操作数栈的。</p>
+<p>4. NeedCast函数在判断dt1的数据类型时，如果是dummytype，  
+就返回－1</p>
+<p>表示不需要修改数据类型</p>
+<font COLOR="#008000">
+<p>///////////////////////////////////////////////////////////</p>
+<p>///////////////////////////////////////////////////////////</p>
+</font>
+<p><font COLOR="#a000a0">SE_VERSION</font> <font COLOR="#a000a0">_T</font>(&quot;2.0.0 
+0012B&quot;)</p>
+<p>------------------------------------------</p>
+<p>这个版本包含以下修改</p>
+<p>1. 修改了CVirtualMachine::OutputMemroyToFile函数， 添加了</p> 
+<p>CVirtualMachine::DumpToFile函数。当脚本发生<font COLOR="#808080">Exception</font>时dump</p>
+<p>虚拟机的内存到文件。</p>
+<font COLOR="#008000">
+<p>///////////////////////////////////////////////////////////</p>
+<p>///////////////////////////////////////////////////////////</p>
+</font>
+<p><font COLOR="#a000a0">SE_VERSION</font> <font COLOR="#a000a0">_T</font>(&quot;2.0.0 
+0013B&quot;)</p>
+<p>------------------------------------------</p>
+<p>这个版本包含以下修改</p>
+<p>1. CVirtualMachine添加了一个变量m_bDebugBreak表示调试状态VM</p> 
+<p>是否正在执行还是已经停下来等待调试命令的输入.</p>
+<p>2. 添加了接口IsDebugBreak来获取VM的调试状态</p> 
+<p>3. 添加了jni的接口(SE_IsDebugBreak)来获取当前调试的VM的调试状态。</p> 
+<p>4. OutputMemToFile中输出到文件的内容增加了当前执行的行数和寄存器值</p> 
+<p>5. 发现bug， java_interface(SE_1GetPFunctionTable)中调用CScriptFuncTable::GetFunction()</p> 
+<p>后没有用ReleaseFunc, 导致表被死锁。已修改。</p> 
+<p>6. 发现bug， compiler在分析函数调用时，如果没有参数，就不会调用ActualParams(v),</p> 
+<p>因此不会校验参数个数, 修改后， 在FunctionCall(v)中校验参数个数.</p> 
+<font COLOR="#008000">
+<p>///////////////////////////////////////////////////////////</p>
+<p>///////////////////////////////////////////////////////////</p>
+</font>
+<p><font COLOR="#a000a0">SE_VERSION</font> <font COLOR="#a000a0">_T</font>(&quot;2.0.0 
+0014B&quot;)</p>
+<p>------------------------------------------</p>
+<p>这个版本包含以下修改</p>
+<p>1. OutputMemToFile中输出到文件的内容修改了</p> 
+<p>2. 修改bug: 当<font COLOR="#0000ff">catch</font>到CVMException时输出<font COLOR="#808080">log</font>的代码有误.</p> 
+<p>3. 修改了断点的数据结构，用一个结构存放断点信息，  
+断点信息</p>
+<p>包括函数名和IP值。</p>
+<font COLOR="#008000">
+<p>///////////////////////////////////////////////////////////</p>
+</font>
+<p><font COLOR="#a000a0">SE_VERSION</font> <font COLOR="#a000a0">_T</font>(&quot;2.0.0 
+0015B&quot;)</p>
+<p>------------------------------------------</p>
+<p>1. 去掉了对&quot;windows.h&quot;的include</p> 
+<p>2. 添加了CVMManager.</p> 
+<font COLOR="#008000">
+<p>///////////////////////////////////////////////////////////</p>
+<p>///////////////////////////////////////////////////////////</p>
+</font>
+<p><font COLOR="#a000a0">SE_VERSION</font> &quot;2.0.0 0016B&quot;</p>
+<p>------------------------------------------</p>
+<p>1. modify CVirtualMachine::<font COLOR="#880000">Reset</font>(), make it more 
+safe</p>
+<p>2. 添加了se_interface, place <font COLOR="#a000a0">all</font> <font COLOR="#a000a0">interface</font>  
+definition <font COLOR="#a000a0">in</font> the file</p> 
+<p>3. 修改了Java调用接口中取字符串的方式，解决了传递中文字符串的问题。</p> 
+<p>4. 纠正了SE_REQ_SetFnID函数的bug: 把hReq作为参数传给了SetFuncID</p> 
+<p>5. 纠正了SE_REQ_EXECScript的错误: 生成参数块时没有把原来的hSession去掉.</p> 
+<p>6. 修改了CPubFunction::AddFunction, 原来的代码似乎不安全</p> 
+<p>7. 1668~1680@<font COLOR="#808080">cp</font>.cpp有错, 把dt写成了td1,  
+而且dt没有初始化</p>
+<p>导致如果<font COLOR="#0000ff">if</font>()中有浮点数的关系运算的话不能编译通过.</p>
+<font COLOR="#008000">
+<p>///////////////////////////////////////////////////////////</p>
+</font>
+<p>　</p>
+<font COLOR="#008000">
+<p>///////////////////////////////////////////////////////////</p>
+</font>
+<p><font COLOR="#a000a0">SE_VERSION</font> <font COLOR="#a000a0">_T</font>(&quot;2.0.0 
+0016B&quot;)</p>
+<p>------------------------------------------</p>
+<p>1. <font COLOR="#808080">fixed</font> <font COLOR="#808080">a</font> bug <font COLOR="#a000a0">in</font> 
+<font COLOR="#0000ff">function</font> &quot;OutputMemToFile&quot; which cause 
+crash</p>
+<p>2. add <font COLOR="#808080">a</font> <font COLOR="#a000a0">interface</font> <font COLOR="#808080">to</font> 
+CCMManager &quot;GetActiveVMNum&quot; and the corresponding</p>
+<font COLOR="#a000a0">
+<p>interface</font> <font COLOR="#808080">to</font> dll</p> 
+<font COLOR="#008000">
+<p>///////////////////////////////////////////////////////////</p>
+<p>///////////////////////////////////////////////////////////</p>
+</font>
+<p><font COLOR="#a000a0">SE_VERSION</font> &quot;2.0.0 0017B&quot;</p>
+<p>------------------------------------------</p>
+<p>1. Modify the CVMManager <font COLOR="#0000ff">class</font>: <font COLOR="#808080">Add</font> 
+the constraint of vm number</p>
+<p>2. modify the CVMManager <font COLOR="#0000ff">class</font>: modify the 
+ReleaseVM(), StopAllVM()</p>
+<p>3. modify the CVirtualMachine: use <font COLOR="#0000ff">event</font> <font COLOR="#808080">to</font> 
+control the vm runng states</p>
+<p>4. modify the SE_GetVersion <font COLOR="#808080">Method</p>
+</font><font COLOR="#008000">
+<p>///////////////////////////////////////////////////////////</p>
+</font>
+<p><font COLOR="#a000a0">SE_VERSION</font> &quot;2.0.0 0018B&quot;</p>
+<p>------------------------------------------</p>
+<p>1. fix <font COLOR="#880000">a</font> bug <font COLOR="#a000a0">in</font> 
+GetFreeVM(). original <font COLOR="#808080">code</font> use the <font COLOR="#0000ff">reference</font> 
+between</p>
+<p>two <font COLOR="#0000ff">vector</font>.</p>
+<p>2. change <font COLOR="#808080">type</font> of CVMManager::m_ActiveVMList <font COLOR="#808080">from</font> 
+<font COLOR="#0000ff">vector</font> <font COLOR="#808080">to</font> <font COLOR="#0000ff">list</font>, 
+because</p>
+<p>it will use <font COLOR="#880000">erase</font>(), which <font COLOR="#808080">is</font> 
+<font COLOR="#808080">a</font> lag operation <font COLOR="#a000a0">in</font> <font COLOR="#0000ff">vector</font>. 
+Due <font COLOR="#808080">to</font> <font COLOR="#0000ff">this</font>, ReleaseVM()</p>
+<p>was modified.</p>
+<font COLOR="#008000">
+<p>///////////////////////////////////////////////////////////</p>
+</font>
+<p><font COLOR="#a000a0">SE_VERSION</font> &quot;2.0.0 0019B&quot;</p>
+<p>------------------------------------------</p>
+<p>1. (2003-06-12)</p>
+<font COLOR="#808080">
+<p>move</font> logic <font COLOR="#808080">from</font> <font COLOR="#808080">cp</font>.cpp  
+<font COLOR="#808080">to</font> ncpp.atg</p> 
+<font COLOR="#008000">
+<p>///////////////////////////////////////////////////////////</p>
+</font>
+<p>　</p>
+<p><font COLOR="#a000a0">SE_VERSION</font> &quot;2.0.0 0020B&quot;</p> 
+<p>------------------------------------------</p>
+<p>1. (2003-06-20)</p>
+<font COLOR="#008000">
+<p>Transplant SE to AIX on IBM RS60000.</p>
+<p>Every thing is smooth but the assembly language. the PowerPC assembly system 
+is so defferent from</p>
+<p>the x86 family. And article online about AIX assembly languag is lacking. xlC 
+and dbx is not very</p>
+<p>friendly. And xlC dese not support the inline assembly, so I write the .s 
+file and compile it to .o</p>
+<p>using as, then link it in makefile</p>
+</font>
+<p>2.(2003-07-12)</p>
+<p>Fix <font COLOR="#808080">a</font> bug on IBM AIX. the LoadRequest and 
+GenerateReq of Request.cpp use</p>
+<p>the actual number of bytes but not the <font COLOR="#0000ff">sizeof</font>(). 
+so on AIX, the request package</p>
+<p>can not be parsed and generated correctly.</p>
+</body>
+</html>

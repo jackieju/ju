@@ -12,3 +12,5 @@ body{
 	.title_comments {
 		font-size:8pt;color:#aaaaaa;float:right;margin-top:10px;
 	}
+	
+	a:link { text-decoration: none;}
